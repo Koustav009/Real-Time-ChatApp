@@ -1,2 +1,2 @@
 # Real-Time-ChatApp
-# Contrubuters pralay, koustav, sk raja, souvik roy
+# Contributors pralay, koustav, sk raja, souvik roy
