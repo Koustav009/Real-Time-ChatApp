@@ -27,7 +27,6 @@ const loginControler = async (req, res) => {
                     phone: user.phone,
                 };
                 const token = generateToken(payload);
-                console.log(token);
                 res.status(201).json({token});
             } else {
                 res.status(401).send("invalid credentials");

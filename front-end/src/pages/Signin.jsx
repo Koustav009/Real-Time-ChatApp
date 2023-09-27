@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import defaultPtofile from "../Media/profile.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import axios from "axios";
+import jwtDecoder from "jwt-decode";
+import { getCookie } from "../Cookie/cookieConfigure";
 const API = "http://localhost:5500/createuser/signin";
 
 function Signin() {
@@ -17,9 +19,24 @@ function Signin() {
     const [isLoadding, setLoadding] = useState(false);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const token = getCookie("token");
+        let isVarifiedToken = false;
+        try {
+            isVarifiedToken = jwtDecoder(token);
+        } catch (error) {
+            isVarifiedToken = false;
+            navigate("/login");
+        } finally {
+            if (isVarifiedToken) {
+                navigate("/chatpage");
+            }
+        }
+    }, []);
+
     // previewing the selected photo for profile
     const handleProfilePhoto = (e) => {
-        if(e.target.files.length){
+        if (e.target.files.length) {
             const url = URL.createObjectURL(e.target.files[0]);
             setFileData(e.target.files[0]);
             setProfile(url);

@@ -1,42 +1,51 @@
 import axios from "axios";
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import defaultPtofile from "../Media/profile.png";
 import { Link, useNavigate } from "react-router-dom";
 import jwtDecoder from "jwt-decode";
-import {setCookie, getCookie} from "../Cookie/cookieConfigure.js"
-import { FaEye, FaEyeSlash, FaRightToBracket } from "react-icons/fa6";
+import { setCookie, getCookie } from "../Cookie/cookieConfigure.js";
+import { FaEye, FaEyeSlash } from "react-icons/fa6";
 
 const API = "http://localhost:5500/createuser/login";
 
 function Login() {
     const navigate = useNavigate();
+    const [isLoadding, setIsLoadding] = useState(false);
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         const token = getCookie("token");
-        const isVarifiedToken = jwtDecoder(token);
-        if(isVarifiedToken){
-            navigate("/chatpage");
+        let isVarifiedToken = false;
+        try {
+            isVarifiedToken = jwtDecoder(token);
+        } catch (error) {
+            isVarifiedToken = false;
+            navigate("/login");
+        } finally {
+            if (isVarifiedToken) {
+                navigate("/chatpage");
+            }
         }
-    }, [])
-
+    });
 
     const handlePasswordInput = (e) => {
         e.preventDefault();
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault() 
-        const credentials = {phone, password};
-        try{
+        e.preventDefault();
+        setIsLoadding(true);
+        const credentials = { phone, password };
+        try {
             const responce = await axios.get(API, {
                 params: credentials,
-            })
+            });
             setCookie("token", responce.data.token);
+            setIsLoadding(false);
             navigate("/chatpage");
-        }catch(error){
+        } catch (error) {
             console.log(error);
         }
     };
@@ -86,7 +95,9 @@ function Login() {
                     )}
                 </button>
             </div>
-            <button type="submit">login</button>
+            <button type="submit">
+                {isLoadding ? "Loadding..." : "login"}
+            </button>
             <p className="info">
                 did't have account <Link to="/signin">signin</Link>
             </p>

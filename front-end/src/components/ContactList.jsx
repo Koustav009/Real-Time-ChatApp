@@ -2,18 +2,15 @@ import React, { useState } from "react";
 import "../Styles/contactList.css";
 import { FaSistrix } from "react-icons/fa6";
 import { BiMessageSquareAdd } from "react-icons/bi";
-import { NavLink, Outlet} from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
+import AddContactModal from "./modals/AddContactModal";
 
 const ContactList = () => {
     const [contactInputField, setContactInputField] = useState("");
+    const [isAddContactModalVisible, setIsAddContactModalVisible] = useState(false);
 
     const handleSearchInput = (e) => {
         setContactInputField(e.target.value);
-    };
-
-    const addContact = () => {
-        alert("add chat");
-        //add contact function
     };
 
     const searchContact = () => {
@@ -26,6 +23,7 @@ const ContactList = () => {
 
     return (
         <div className="contactListArea">
+            {isAddContactModalVisible ? <AddContactModal /> : null}
             <div>
                 <div id="contactSearchDiv">
                     <input
@@ -73,9 +71,14 @@ const ContactList = () => {
                         </NavLink>
                     </li>
                 </ul>
-                <Outlet/>
+                <Outlet />
             </div>
-            <button onClick={addContact} id="contactAddBtn">
+            <button
+                onClick={() => {
+                    setIsAddContactModalVisible(true);
+                }}
+                id="contactAddBtn"
+            >
                 <BiMessageSquareAdd />
             </button>
         </div>
