@@ -1,6 +1,7 @@
 # Real-Time-ChatApp
 # Contributors -
-Pralay Giri
-Koustav Manna
-Raja
-Souvik
+===============================
+1. Pralay Giri
+2. KOustav Manna
+3. Raja
+4. Souvik
