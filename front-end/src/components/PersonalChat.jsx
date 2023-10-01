@@ -1,22 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 import Contact from "./Contact";
 import { contacts } from "../Database/Contacts";
-import { ContactContext } from "../Context";
 
 function PersonalChat() {
-    const { setSelectedContact } = useContext(ContactContext);
-    const [newSelectedContact, setewSelectedContact] = useState({});
-    // this  selectedContactFromChild come form contact component
-    const handleClick = (selectedContactFromChild) => {
-        setewSelectedContact((prevState) => {
-            return selectedContactFromChild;
-        });
-    };
-    useEffect(() => {
-        setSelectedContact((prevState) => {
-            return newSelectedContact;
-        });
-    }, [newSelectedContact]);
+    const handleClick = ()=>{
+        alert("Selected");
+    }
+
     return (
         <div className="chatlist">
             {contacts.map((contact, index) => {

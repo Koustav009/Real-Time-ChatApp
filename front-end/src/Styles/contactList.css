@@ -1,9 +1,30 @@
 .contactListArea {
-    position: relative;
     border-radius: 10px;
     min-height: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
+}
+
+
+
+.contactLlstHead{
+    display: flex;
+    justify-content: space-between;
+}
+
+.contactLlstHead .profile{
+    width: 3rem;
+    height: 3rem;
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border: 1px solid var(--text-color-less);
+    margin-right: auto;
+    border-radius: 50%;
+    object-fit:cover;
+    object-position: center;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 #contactSearchDiv {
@@ -164,23 +185,18 @@
 }
 
 #contactAddBtn{
-    position: absolute;
-    bottom: 0;
-    left: 0;
     cursor: pointer;
-    border-radius: 50%;
     padding: 10px;
     outline: none;
     border: none;
-    color: var(--info-text-color);
-    background-color: var(--contact-list-hover-color);
-    opacity: .7;
-    transform: opacity 0.3s;
+    color: var(--text-color-less);
+    background-color: transparent;
+    transform: color 1s;
 }
 #contactAddBtn *{
     font-size: 2rem;
 }
 
 #contactAddBtn:is(:hover, :focus){
-    opacity: 1;
+    color: var(--text-color);
 }

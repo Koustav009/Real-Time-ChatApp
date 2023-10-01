@@ -1,8 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import { ContactState } from "../Context";
+import React from "react";
 
-const Contact = ({ contact, onChildClick }) => {
-    
+const Contact = ({ contact, onChildClick }) => {    
     const defaultProfile =
         "https://png.pngitem.com/pimgs/s/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
 

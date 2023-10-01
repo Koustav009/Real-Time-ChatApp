@@ -11,7 +11,6 @@ export const getCookie = (name)=>{
     return Cookie.get(name);
 }
 
-
 export const removeCookie = (name)=>{
     Cookie.remove(name);
 }

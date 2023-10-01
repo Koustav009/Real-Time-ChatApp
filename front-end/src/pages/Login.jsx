@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import defaultPtofile from "../Media/profile.png";
 import { Link, useNavigate } from "react-router-dom";
-import jwtDecoder from "jwt-decode";
 import { setCookie, getCookie } from "../Cookie/cookieConfigure.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
+import { auth } from "../Cookie/auth";
 
 const API = "http://localhost:5500/createuser/login";
 
@@ -15,20 +15,14 @@ function Login() {
     const [password, setPassword] = useState("");
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+    // cheacking if the user has his sassion
     useEffect(() => {
         const token = getCookie("token");
-        let isVarifiedToken = false;
-        try {
-            isVarifiedToken = jwtDecoder(token);
-        } catch (error) {
-            isVarifiedToken = false;
-            navigate("/login");
-        } finally {
-            if (isVarifiedToken) {
-                navigate("/chatpage");
-            }
+        const user = auth(token);
+        if(user){
+            navigate("/chatpage");
         }
-    });
+    }, []);
 
     const handlePasswordInput = (e) => {
         e.preventDefault();
@@ -46,6 +40,7 @@ function Login() {
             setIsLoadding(false);
             navigate("/chatpage");
         } catch (error) {
+            setIsLoadding(false);
             console.log(error);
         }
     };

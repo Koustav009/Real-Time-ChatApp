@@ -1,49 +1,63 @@
 import React, { useState } from "react";
+import "../../Styles/addContactModal.css";
+import { ImCross } from "react-icons/im";
 import axios from "axios";
 
 const API = "http://localhost:5500/contact/addcontact";
 
-function AddContactModal() {
+function AddContactModal({ closeModal }) {
     const [inputData, setInputData] = useState("");
 
     const handleClick = async (e) => {
         e.preventDefault();
         const payload = {
-            inputData,
+            receiverNumber: inputData,
+            userNumber: "9641462817",
         };
-        const responce = await axios.post(API, payload, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-        console.log(responce);
-    };
-
-    const handleClose = () => {
-        // instate of i will add use contaxt
-        document
-            .querySelector("#add-contact-modal")
-            .setAttribute("style", "display: none;");
+        try {
+            const responce = await axios.post(API, payload);
+            console.log(responce);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
-        <div
-            id="add-contact-modal"
-            style={{
-                backgroundColor: "red",
-            }}
-        >
-            <input
-                type="text"
-                value={inputData}
-                onChange={(e) => {
-                    setInputData(e.target.value);
-                }}
-                placeholder="phone number"
-                id="add-contact-phone"
-            />
-            <button onClick={handleClose}>Close</button>
-            <button onClick={handleClick}>Add</button>
+        <div className="add-contact-modal-background">
+            <div id="add-contact-modal">
+                <div id="add-contact-modal-head">
+                    <p>add your contact</p>
+                    <button
+                        onClick={() => {
+                            closeModal(false);
+                        }}
+                    >
+                        <ImCross />
+                    </button>
+                </div>
+                <input
+                    type="number"
+                    value={inputData}
+                    onChange={(e) => {
+                        setInputData(e.target.value);
+                    }}
+                    placeholder="phone number"
+                    id="add-contact-modal-body"
+                />
+                <div id="add-contact-modal-footer">
+                    <button id="closeBtn" onClick={handleClick}>
+                        Add
+                    </button>
+                    <button
+                        id="closeBtn"
+                        onClick={() => {
+                            closeModal(false);
+                        }}
+                    >
+                        Close
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

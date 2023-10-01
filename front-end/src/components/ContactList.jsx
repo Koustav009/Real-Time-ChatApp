@@ -7,7 +7,8 @@ import AddContactModal from "./modals/AddContactModal";
 
 const ContactList = () => {
     const [contactInputField, setContactInputField] = useState("");
-    const [isAddContactModalVisible, setIsAddContactModalVisible] = useState(false);
+    const [isAddContactModalVisible, setIsAddContactModalVisible] =
+        useState(false);
 
     const handleSearchInput = (e) => {
         setContactInputField(e.target.value);
@@ -21,10 +22,30 @@ const ContactList = () => {
         }
     };
 
+    const showProfile = (e)=>{
+        alert("profile");
+    }
+
     return (
         <div className="contactListArea">
-            {isAddContactModalVisible ? <AddContactModal /> : null}
             <div>
+                <div className="contactLlstHead">
+                    <button className="profile" onClick={showProfile}>
+                        <img
+                            src="https://www.pngitem.com/pimgs/m/146-1468281_profile-icon-png-transparent-profile-picture-icon-png.png"
+                            alt="profile"
+                            width={50}
+                        />
+                    </button>
+                    <button
+                        onClick={() => {
+                            setIsAddContactModalVisible(true);
+                        }}
+                        id="contactAddBtn"
+                    >
+                        <BiMessageSquareAdd />
+                    </button>
+                </div>
                 <div id="contactSearchDiv">
                     <input
                         type="text"
@@ -73,14 +94,9 @@ const ContactList = () => {
                 </ul>
                 <Outlet />
             </div>
-            <button
-                onClick={() => {
-                    setIsAddContactModalVisible(true);
-                }}
-                id="contactAddBtn"
-            >
-                <BiMessageSquareAdd />
-            </button>
+            {isAddContactModalVisible && (
+                <AddContactModal closeModal={setIsAddContactModalVisible} />
+            )}
         </div>
     );
 };

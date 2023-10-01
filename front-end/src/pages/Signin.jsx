@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import defaultPtofile from "../Media/profile.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import axios from "axios";
-import jwtDecoder from "jwt-decode";
+import { auth } from "../Cookie/auth";
 import { getCookie } from "../Cookie/cookieConfigure";
 const API = "http://localhost:5500/createuser/signin";
 
@@ -19,18 +19,12 @@ function Signin() {
     const [isLoadding, setLoadding] = useState(false);
     const navigate = useNavigate();
 
+    // cheacking if the user has his sassion
     useEffect(() => {
         const token = getCookie("token");
-        let isVarifiedToken = false;
-        try {
-            isVarifiedToken = jwtDecoder(token);
-        } catch (error) {
-            isVarifiedToken = false;
-            navigate("/login");
-        } finally {
-            if (isVarifiedToken) {
-                navigate("/chatpage");
-            }
+        const user = auth(token);
+        if(user){
+            navigate("/chatpage");
         }
     }, []);
 
@@ -65,8 +59,6 @@ function Signin() {
             fromData.set("password", password);
             fromData.set("gmail", gmail);
             fromData.set("profilePhoto", fileData);
-
-            console.log(fileData);
             try {
                 const responce = await axios.post(API, fromData);
                 if (responce) {

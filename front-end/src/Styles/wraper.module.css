@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Cedarville+Cursive&family=Dosis&family=Mukta:wght@300&family=Nunito&family=Pacifico&family=REM:wght@500&family=Tilt+Neon&family=Unbounded&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root{
+:root {
   --background-color: #d3f4fc;
   --wraper-color: #e0eff3;
   --wraper-border-color: #fefefe;
@@ -14,9 +14,12 @@
   --text-color-less: #8b8b8b;
   --online-indecator: #44ff85;
   --contact-list-hover-color: #e8fbff;
-  --info-text-color: #1ad5ff; 
+  --info-text-color: #1ad5ff;
+  --info-text-color: #90def1;
+  --modal-background-color: rgba(255, 255, 255, 0.);
 }
-::selection{
+
+::selection {
   background-color: #15d1c4;
 }
 
@@ -26,7 +29,7 @@ html {
   font-family: 'Unbounded', sans-serif;
 }
 
-body{
+body {
   position: absolute;
   inset: 0;
   margin: 1rem;
@@ -35,4 +38,3 @@ body{
   border-radius: 10px;
   overflow: hidden;
 }
-
