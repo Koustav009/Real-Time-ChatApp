@@ -1,14 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../Styles/contactList.css";
 import { FaSistrix } from "react-icons/fa6";
 import { BiMessageSquareAdd } from "react-icons/bi";
 import { NavLink, Outlet } from "react-router-dom";
 import AddContactModal from "./modals/AddContactModal";
+import { context } from "../context/UserContext";
+import ErrorModal from "./modals/ErrorModal";
 
 const ContactList = () => {
     const [contactInputField, setContactInputField] = useState("");
     const [isAddContactModalVisible, setIsAddContactModalVisible] =
         useState(false);
+    const [error, setError] = useState(false);
+    const [isErrorModalVisible, setIsErrorModalVisible] = useState(false);
+    const { user, setUser } = useContext(context);
 
     const handleSearchInput = (e) => {
         setContactInputField(e.target.value);
@@ -22,9 +27,9 @@ const ContactList = () => {
         }
     };
 
-    const showProfile = (e)=>{
-        alert("profile");
-    }
+    const showProfile = (e) => {
+        alert(user.name);
+    };
 
     return (
         <div className="contactListArea">
@@ -95,8 +100,12 @@ const ContactList = () => {
                 <Outlet />
             </div>
             {isAddContactModalVisible && (
-                <AddContactModal closeModal={setIsAddContactModalVisible} />
+                <AddContactModal
+                    closeModal={setIsAddContactModalVisible}
+                    handleError={setError}
+                />
             )}
+            {error && <ErrorModal handleError={setError}/>}
         </div>
     );
 };

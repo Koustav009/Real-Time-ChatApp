@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "../../Styles/addContactModal.css";
 import { ImCross } from "react-icons/im";
 import axios from "axios";
+import { context } from "../../context/UserContext";
 
 const API = "http://localhost:5500/contact/addcontact";
 
-function AddContactModal({ closeModal }) {
+function AddContactModal({ closeModal, handleError }) {
     const [inputData, setInputData] = useState("");
+
+    const { user } = useContext(context);
 
     const handleClick = async (e) => {
         e.preventDefault();
         const payload = {
             receiverNumber: inputData,
-            userNumber: "9641462817",
+            userNumber: user.phone,
         };
         try {
-            const responce = await axios.post(API, payload);
-            console.log(responce);
+            await axios.post(API, payload);
+            closeModal(false);
         } catch (error) {
             console.log(error);
+            closeModal(false);
+            handleError(true);
         }
     };
 
@@ -38,6 +43,7 @@ function AddContactModal({ closeModal }) {
                 <input
                     type="number"
                     value={inputData}
+                    autoFocus
                     onChange={(e) => {
                         setInputData(e.target.value);
                     }}

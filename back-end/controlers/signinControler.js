@@ -10,8 +10,6 @@ const signinControler = async (req, res) => {
     try {
         const isUserAvalable = await UserModel.findOne({ phone });
         if (!isUserAvalable) {
-            
-            // adding profile to folder (/profiles)
             profilePhoto.mv(path.join(profilesPath, profileString));
             const user = UserModel({
                 name,

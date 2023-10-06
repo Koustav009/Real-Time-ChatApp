@@ -6,6 +6,7 @@ import { setCookie, getCookie } from "../Cookie/cookieConfigure.js";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
 import { auth } from "../Cookie/auth";
 
+
 const API = "http://localhost:5500/createuser/login";
 
 function Login() {
@@ -15,14 +16,13 @@ function Login() {
     const [password, setPassword] = useState("");
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-    // cheacking if the user has his sassion
     useEffect(() => {
         const token = getCookie("token");
         const user = auth(token);
-        if(user){
+        if (user) {
             navigate("/chatpage");
         }
-    }, []);
+    }, [navigate]);
 
     const handlePasswordInput = (e) => {
         e.preventDefault();

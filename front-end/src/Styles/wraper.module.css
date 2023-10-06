@@ -17,6 +17,8 @@
   --info-text-color: #1ad5ff;
   --info-text-color: #90def1;
   --modal-background-color: rgba(255, 255, 255, 0.);
+  --error-color: #ed604b;
+  --error-color-less: #f42100c9;
 }
 
 ::selection {

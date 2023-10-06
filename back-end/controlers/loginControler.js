@@ -16,13 +16,11 @@ const loginControler = async (req, res) => {
     const { phone, password } = req.query;
     try {
         const user = await UserModel.findOne({ phone });
-        console.log(user);
         if (user) {
             const isValidPassword = await bcrypt.compare(
                 password,
                 user.password
             );
-            console.log(isValidPassword);
             if (isValidPassword) {
                 const payload = {
                     name: user.name,
