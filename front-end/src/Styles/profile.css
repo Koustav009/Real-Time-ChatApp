@@ -1,0 +1,92 @@
+.profile-bg {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(5px);
+    animation: animate .2s linear;
+    background-color:var(--background-color);
+}
+
+.profile-div{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.profile-div .profile-header{
+    background-color: var(--profile-background-color);
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.profile-div .profile-header .profile-header-back-btn{
+    cursor: pointer;
+    font-size: 2rem;
+}
+
+.profile-div .profile-header .profile-header-back-btn:hover{
+    color: var(--text-color-less);
+    transition: color .1s ease-in-out;
+}
+
+.profile-div .profile-header > p{
+    font-size: large;   
+}
+
+
+.profile-div .profile-pic{
+    margin: auto;
+    position: relative;
+}
+
+.profile-div .profile-pic .pic{
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid black;
+}
+
+.profile-div .profile-pic .pic > img{
+    width: 100%;
+}
+
+.profile-div .profile-pic .profile-camera{
+    font-size:x-large;
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    cursor: pointer;
+}
+
+.profile-div .profile-info > div{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+    margin: 10px;
+}
+
+.profile-div .profile-info > div .edit-btn{
+    margin-left: auto;
+    font-size: large;
+    color: var(--text-color);
+}
+
+.profile-div .profile-info > div .edit-btn:hover{
+    color: var(--text-color-less);
+    transition: color .2s ease-in-out;
+    cursor: pointer;
+}
+.profile-div .profile-info > div .info-head{
+    font-size: 10px;
+    color: var(--text-color-less);
+}
+
+.profile-div .profile-info > div .info-value{
+    color: var(--text-color);
+}

@@ -32,10 +32,12 @@ function Login() {
         e.preventDefault();
         setIsLoadding(true);
         const credentials = { phone, password };
+        console.log(credentials);
         try {
             const responce = await axios.get(API, {
                 params: credentials,
             });
+            console.log(responce.data.token);
             setCookie("token", responce.data.token);
             setIsLoadding(false);
             navigate("/chatpage");

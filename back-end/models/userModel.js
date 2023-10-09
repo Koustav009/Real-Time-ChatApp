@@ -59,13 +59,19 @@ const userSchema = mongoose.Schema({
             ref: "UserModel",
         },
     ],
+    groupList: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "UserModel",
+        },
+    ],
 });
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified()) {
         next();
     }
-    const salt = await bcrypt.genSalt(12);
+    const salt = await bcrypt.genSalt(10);
     const hashedPasssword = await bcrypt.hash(this.password, salt);
     this.password = hashedPasssword;
     next();

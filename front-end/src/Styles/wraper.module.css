@@ -14,11 +14,11 @@
   --text-color-less: #8b8b8b;
   --online-indecator: #44ff85;
   --contact-list-hover-color: #e8fbff;
-  --info-text-color: #1ad5ff;
   --info-text-color: #90def1;
-  --modal-background-color: rgba(255, 255, 255, 0.);
+  --modal-background-color: rgba(244, 226, 226, 0.1);
   --error-color: #ed604b;
   --error-color-less: #f42100c9;
+  --profile-background-color: #90def1;
 }
 
 ::selection {

@@ -1,8 +1,11 @@
 const UserModel = require("../models/userModel");
 
 const addContact = async (req, res) => {
-    const { userNumber, receiverNumber } = req.body;
-    userNumber === receiverNumber && res.status(409).send("you can't add");
+    const userNumber = req.user.phone;
+    const { receiverNumber } = req.body;
+    if (userNumber === receiverNumber) {
+        return res.status(409).send("you can't add");
+    }
     try {
         const receiverUser = await UserModel.findOne({
             phone: receiverNumber,

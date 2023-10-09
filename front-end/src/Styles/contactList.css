@@ -3,6 +3,7 @@
     min-height: 100%;
     display: grid;
     grid-template-rows: auto 1fr;
+    position: relative;
 }
 
 
@@ -10,6 +11,7 @@
 .contactLlstHead{
     display: flex;
     justify-content: space-between;
+    gap: 5px;
 }
 
 .contactLlstHead .profile{
@@ -19,12 +21,17 @@
     outline: none;
     border: none;
     border: 1px solid var(--text-color-less);
-    margin-right: auto;
     border-radius: 50%;
     object-fit:cover;
     object-position: center;
     overflow: hidden;
     cursor: pointer;
+}
+
+.contactLlstHead .user-name{
+    margin-block: auto;
+    margin-right: auto;
+    color: var(--text-color);
 }
 
 #contactSearchDiv {

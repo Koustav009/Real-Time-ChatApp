@@ -1,29 +1,30 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import "../../Styles/addContactModal.css";
 import { ImCross } from "react-icons/im";
 import axios from "axios";
-import { context } from "../../context/UserContext";
+import { getCookie } from "../../Cookie/cookieConfigure";
+// import { context } from "../../context/UserContext";
 
 const API = "http://localhost:5500/contact/addcontact";
 
 function AddContactModal({ closeModal, handleError }) {
     const [inputData, setInputData] = useState("");
 
-    const { user } = useContext(context);
-
     const handleClick = async (e) => {
         e.preventDefault();
         const payload = {
             receiverNumber: inputData,
-            userNumber: user.phone,
         };
         try {
-            await axios.post(API, payload);
+            await axios.post(API, payload, {
+                headers: {
+                    "Authorization": `Bearer ${getCookie("token")}`,
+                },
+            });
             closeModal(false);
         } catch (error) {
-            console.log(error);
-            closeModal(false);
-            handleError(true);
+            closeModal(false);  
+            handleError(error.response.data);
         }
     };
 
