@@ -8,31 +8,25 @@ import PersonalChat from "./PersonalChat";
 import GroupChat from "./GroupChat";
 import Login from "../pages/Login";
 import Signin from "../pages/Signin";
-import { UserContext } from "../context/UserContext";
 
 const App = () => {
     return (
         <div className={style.wraper}>
-            <UserContext>
-                <BrowserRouter>
-                    <Routes>
-                        <Route path="/" exact element={<Authentication />}>
-                            <Route index element={<Login />} />
-                            <Route path="login" element={<Login />} />
-                            <Route path="signin" element={<Signin />} />
-                        </Route>
-                        <Route path="/chatpage" element={<Chatpage />}>
-                            <Route index element={<AllChat />} />
-                            <Route path="allchat" element={<AllChat />} />
-                            <Route
-                                path="personalchat"
-                                element={<PersonalChat />}
-                            />
-                            <Route path="groupchats" element={<GroupChat />} />
-                        </Route>
-                    </Routes>
-                </BrowserRouter>
-            </UserContext>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" exact element={<Authentication />}>
+                        <Route index element={<Login />} />
+                        <Route path="login" element={<Login />} />
+                        <Route path="signin" element={<Signin />} />
+                    </Route>
+                    <Route path="/chatpage" element={<Chatpage />}>
+                        <Route index element={<AllChat />} />
+                        <Route path="allchat" element={<AllChat />} />
+                        <Route path="personalchat" element={<PersonalChat />} />
+                        <Route path="groupchats" element={<GroupChat />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </div>
     );
 };

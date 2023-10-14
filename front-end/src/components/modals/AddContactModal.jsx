@@ -7,7 +7,7 @@ import { getCookie } from "../../Cookie/cookieConfigure";
 
 const API = "http://localhost:5500/contact/addcontact";
 
-function AddContactModal({ closeModal, handleError }) {
+function AddContactModal({ closeModal, handleError, handleSuccess }) {
     const [inputData, setInputData] = useState("");
 
     const handleClick = async (e) => {
@@ -22,6 +22,7 @@ function AddContactModal({ closeModal, handleError }) {
                 },
             });
             closeModal(false);
+            handleSuccess(true);
         } catch (error) {
             closeModal(false);  
             handleError(error.response.data);

@@ -6,6 +6,7 @@ import ContactList from "../components/ContactList";
 import { getCookie } from "../Cookie/cookieConfigure";
 import { auth } from "../Cookie/auth";
 import "../Styles/chatpage.css";
+import { UserContext } from "../context/UserContext";
 
 const Chatpage = () => {
     const navigator = useNavigate();
@@ -18,16 +19,14 @@ const Chatpage = () => {
         }
     }, [navigator]);
 
-    const [selectedContact, setSelectedContact] = useState();
     return (
-        <div className="chatpageDiv">
-            <ContactList
-                selectedContact={selectedContact}
-                setSelectedContact={setSelectedContact}
-            />
-            <MessageArea />
-            <ProfileArea />
-        </div>
+        <UserContext>
+            <div className="chatpageDiv">
+                <ContactList />
+                <MessageArea />
+                <ProfileArea />
+            </div>
+        </UserContext>
     );
 };
 

@@ -10,11 +10,15 @@ import axios from "axios";
 import { getCookie } from "../Cookie/cookieConfigure";
 import { auth } from "../Cookie/auth";
 import ProfileModal from "./modals/ProfileModal";
+import Loadding from "./modals/Loadding";
+import Success from "./modals/Success";
 const API = "http://localhost:5500/getusercredential";
 
 const ContactList = () => {
     const navigator = useNavigate();
     const [error, setError] = useState();
+    const [success, setSuccess] = useState(false);
+    const [loadding, setLoadding] = useState(true);
     const { user, setUser } = useContext(context);
     const [showProfile, setShowProfile] = useState(false);
     const [contactInputField, setContactInputField] = useState("");
@@ -29,6 +33,7 @@ const ContactList = () => {
             return;
         }
         const fetchData = async () => {
+            setLoadding(true);
             try {
                 const responce = await axios.get(API, {
                     headers: {
@@ -47,9 +52,10 @@ const ContactList = () => {
             } catch (error) {
                 console.log(error);
             }
+            setLoadding(false);
         };
         fetchData();
-    }, [navigator, setUser]);
+    }, [setLoadding, setUser]);
 
     const handleSearchInput = (e) => {
         setContactInputField(e.target.value);
@@ -63,100 +69,104 @@ const ContactList = () => {
         }
     };
     return (
-        user && (
-            <div className="contactListArea">
-                <div>
-                    <div className="contactLlstHead">
-                        <button
-                            className="profile"
-                            onClick={() => {
-                                setShowProfile(true);
-                            }}
-                        >
-                            <img
-                                src={
-                                    user.profile
-                                        ? user.profile
-                                        : "https://www.pngitem.com/pimgs/m/146-1468281_profile-icon-png-transparent-profile-picture-icon-png.png"
-                                }
-                                alt="profile"
-                                width={50}
-                            />
-                        </button>
-                        <p className="user-name">
-                            {user.name
-                                .slice(0, user.name.indexOf(" "))
-                                .toLowerCase()}
-                        </p>
-                        <button
-                            onClick={() => {
-                                setIsAddContactModalVisible(true);
-                            }}
-                            id="contactAddBtn"
-                        >
-                            <BiMessageSquareAdd />
-                        </button>
-                    </div>
-                    <div id="contactSearchDiv">
-                        <input
-                            type="text"
-                            value={contactInputField}
-                            onChange={handleSearchInput}
-                            placeholder="search contact"
-                            id="contactSearchInput"
+        <div className="contactListArea">
+            <div>
+                <div className="contactLlstHead">
+                    <button
+                        className="profile"
+                        onClick={() => {
+                            setShowProfile(true);
+                        }}
+                    >
+                        <img
+                            src={
+                                user?.profile
+                                    ? user.profile
+                                    : "https://www.pngitem.com/pimgs/m/146-1468281_profile-icon-png-transparent-profile-picture-icon-png.png"
+                            }
+                            alt="profile"
+                            width={50}
                         />
-                        <FaSistrix id="searchIcon" onClick={searchContact} />
-                    </div>
-                    <h1 id="chatHeading">Chats</h1>
+                    </button>
+                    <p className="user-name">
+                        {user?.name
+                            .slice(0, user.name.indexOf(" "))
+                            .toLowerCase()}
+                    </p>
+                    <button
+                        onClick={() => {
+                            setIsAddContactModalVisible(true);
+                        }}
+                        id="contactAddBtn"
+                    >
+                        <BiMessageSquareAdd />
+                    </button>
                 </div>
-                <div className="chatListdiv">
-                    <ul className="navigation">
-                        <li>
-                            <NavLink
-                                to="allchat"
-                                className={({ isActive }) =>
-                                    isActive ? "active" : ""
-                                }
-                            >
-                                All
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="personalchat"
-                                className={({ isActive }) =>
-                                    isActive ? "active" : ""
-                                }
-                            >
-                                Personal
-                            </NavLink>
-                        </li>
-
-                        <li>
-                            <NavLink
-                                to="groupchats"
-                                className={({ isActive }) =>
-                                    isActive ? "active" : ""
-                                }
-                            >
-                                Group
-                            </NavLink>
-                        </li>
-                    </ul>
-                    <Outlet />
-                </div>
-                {isAddContactModalVisible && (
-                    <AddContactModal
-                        closeModal={setIsAddContactModalVisible}
-                        handleError={setError}
+                <div id="contactSearchDiv">
+                    <input
+                        type="text"
+                        value={contactInputField}
+                        onChange={handleSearchInput}
+                        placeholder="search contact"
+                        id="contactSearchInput"
                     />
-                )}
-                {error && (
-                    <ErrorModal handleError={setError} errorMsg={error} />
-                )}
-                {showProfile && <ProfileModal closeModal={setShowProfile}/>}
+                    <FaSistrix id="searchIcon" onClick={searchContact} />
+                </div>
+                <h1 id="chatHeading">Chats</h1>
             </div>
-        )
+            <div className="chatListdiv">
+                <ul className="navigation">
+                    <li>
+                        <NavLink
+                            to="allchat"
+                            className={({ isActive }) =>
+                                isActive ? "active" : ""
+                            }
+                        >
+                            All
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink
+                            to="personalchat"
+                            className={({ isActive }) =>
+                                isActive ? "active" : ""
+                            }
+                        >
+                            Personal
+                        </NavLink>
+                    </li>
+
+                    <li>
+                        <NavLink
+                            to="groupchats"
+                            className={({ isActive }) =>
+                                isActive ? "active" : ""
+                            }
+                        >
+                            Group
+                        </NavLink>
+                    </li>
+                </ul>
+                <Outlet />
+            </div>
+            {loadding && <Loadding />}
+            {isAddContactModalVisible && (
+                <AddContactModal
+                    closeModal={setIsAddContactModalVisible}
+                    handleError={setError}
+                    handleSuccess={setSuccess}
+                />
+            )}
+            {error && <ErrorModal handleError={setError} errorMsg={error} />}
+            {success && (
+                <Success
+                    closeModal={setSuccess}
+                    successMsg={"contact added successfull"}
+                />
+            )}
+            {showProfile && <ProfileModal closeModal={setShowProfile} />}
+        </div>
     );
 };
 

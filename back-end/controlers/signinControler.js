@@ -21,7 +21,7 @@ const signinControler = async (req, res) => {
             const responce = await user.save();
             res.json(responce);
         } else {
-            res.status(500).send("User Not Avalable");
+            res.status(500).send("Number already used");
         }
     } catch (error) {
         res.status(500).send("error");

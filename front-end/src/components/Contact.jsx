@@ -1,34 +1,32 @@
 import React from "react";
 
-const Contact = ({ contact, onChildClick }) => {    
+const Contact = ({ contact, onChildClick }) => {
     const defaultProfile =
         "https://png.pngitem.com/pimgs/s/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png";
 
-    const handleClick = ()=>{
+    const handleClick = () => {
         onChildClick(contact);
-    }
+    };
+
+    const { name, profile, lastActive, status, phone } = contact;
     return (
-        <div className="contact" key={contact.id} onClick={handleClick}>
+        <div className="contact" onClick={handleClick}>
             <div className="profileImg">
                 <img
-                    src={contact.profile ? contact.profile : defaultProfile}
-                    alt=""
+                    src={profile ? profile : defaultProfile}
+                    alt="profile"
                     width={100}
                 />
             </div>
             <div className="contact-info">
-                <h1 className="name">{contact.name}</h1>
-                <p className="lastmessage">
-                    {contact.typingStatus
-                        ? "Typing..."
-                        : contact.lastMessage}
-                </p>
+                <h1 className="name">{name ? name.split(" ")[0].toLowerCase() : phone}</h1>
+                <p className="lastmessage">{false ? "Typing..." : "hello"}</p>
             </div>
             <div className="status">
-                {contact.isOnline ? (
+                {status === "online" ? (
                     <span className="onlineIndecator"></span>
                 ) : (
-                    <p className="lastseen">{contact.lastSeen}</p>
+                    <p className="lastseen">{lastActive?new Date(lastActive).toLocaleTimeString() :null}</p>
                 )}
             </div>
         </div>

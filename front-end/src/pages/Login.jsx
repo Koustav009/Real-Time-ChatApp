@@ -37,7 +37,6 @@ function Login() {
             const responce = await axios.get(API, {
                 params: credentials,
             });
-            console.log(responce.data.token);
             setCookie("token", responce.data.token);
             setIsLoadding(false);
             navigate("/chatpage");

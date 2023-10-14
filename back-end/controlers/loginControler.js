@@ -1,10 +1,9 @@
-const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
-dotenv.config();
-
+require("dotenv").config();
+const crypto = require("crypto-js");
 const UserModel = require("../models/userModel");
 const JWTPRIVATE = process.env.JWTPRIVATE;
+const SALT = process.env.SALT;
 
 const generateToken = (payload) => {
     return jwt.sign(payload, JWTPRIVATE, {
@@ -12,25 +11,27 @@ const generateToken = (payload) => {
     });
 };
 
+const isValidPassword = (enteredPassword, storedPassword) => {
+    const hashedPassword = crypto.SHA256(enteredPassword, SALT, crypto.enc.Hex);
+    const password = hashedPassword.toString(crypto.enc.Hex);
+    console.log(storedPassword, password);
+    return password === storedPassword;
+};
+
 const loginControler = async (req, res) => {
     const { phone, password } = req.query;
     try {
         const user = await UserModel.findOne({ phone });
-        console.log(user);
         if (user) {
-            const isValidPassword = await bcrypt.compare(
-                password,
-                user.password
-            );
-            console.log(isValidPassword);
-            if (isValidPassword) {
+            const isValidUser = isValidPassword(password, user.password);
+            if (isValidUser) {
                 const payload = {
                     name: user.name,
                     phone: user.phone,
                 };
                 const token = generateToken(payload);
-                res.status(201).json({token});
-            } else {    
+                res.status(201).json({ token });
+            } else {
                 res.status(401).send("invalid credentials");
             }
         } else {
