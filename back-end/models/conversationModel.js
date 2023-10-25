@@ -9,10 +9,10 @@ const conversationSchema = mongoose.Schema({
         type: String,
         default: null,
     },
-    unseenMessageCount: {
-        type: Number,
-        default: 0,
-    }
+    isGroupChat: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const ConversationModel = mongoose.model("ConversationModel", conversationSchema);

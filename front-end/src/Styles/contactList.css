@@ -132,13 +132,13 @@
 .contact {
     cursor: pointer;
     display: flex;
-    align-items: center;
     margin-block: 1rem;
     padding-block: 1rem;
     padding-inline: 1rem;
     border-radius: 1rem;
     overflow: hidden;
     transition: all .3s;
+    margin-bottom: auto;
 }
 
 .contact *{
@@ -189,7 +189,7 @@
     color: var(--text-color-less);
 }
 
-#contactAddBtn{
+.contactBtn{
     cursor: pointer;
     padding: 10px;
     outline: none;
@@ -198,10 +198,10 @@
     background-color: transparent;
     transform: color 1s;
 }
-#contactAddBtn *{
+.contactBtn *{
     font-size: 2rem;
 }
 
-#contactAddBtn:is(:hover, :focus){
+.contactBtn:is(:hover, :focus){
     color: var(--text-color);
 }

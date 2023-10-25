@@ -20,7 +20,7 @@ const Contact = ({ contact, onChildClick }) => {
             </div>
             <div className="contact-info">
                 <h1 className="name">{name ? name.split(" ")[0].toLowerCase() : phone}</h1>
-                <p className="lastmessage">{false ? "Typing..." : "hello"}</p>
+                <p className="lastmessage">{false ? "Typing..." : "last message"}</p>
             </div>
             <div className="status">
                 {status === "online" ? (

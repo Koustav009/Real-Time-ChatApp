@@ -12,21 +12,24 @@ import Signin from "../pages/Signin";
 const App = () => {
     return (
         <div className={style.wraper}>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" exact element={<Authentication />}>
-                        <Route index element={<Login />} />
-                        <Route path="login" element={<Login />} />
-                        <Route path="signin" element={<Signin />} />
-                    </Route>
-                    <Route path="/chatpage" element={<Chatpage />}>
-                        <Route index element={<AllChat />} />
-                        <Route path="allchat" element={<AllChat />} />
-                        <Route path="personalchat" element={<PersonalChat />} />
-                        <Route path="groupchats" element={<GroupChat />} />
-                    </Route>
-                </Routes>
-            </BrowserRouter>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" exact element={<Authentication />}>
+                            <Route index element={<Login />} />
+                            <Route path="login" element={<Login />} />
+                            <Route path="signin" element={<Signin />} />
+                        </Route>
+                        <Route path="/chatpage" element={<Chatpage />}>
+                            <Route index element={<AllChat />} />
+                            <Route path="allchat" element={<AllChat />} />
+                            <Route
+                                path="personalchat"
+                                element={<PersonalChat />}
+                            />
+                            <Route path="groupchats" element={<GroupChat />} />
+                        </Route>
+                    </Routes>
+                </BrowserRouter>
         </div>
     );
 };

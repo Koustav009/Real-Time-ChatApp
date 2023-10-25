@@ -1,7 +1,17 @@
 const UserModel = require("../models/userModel");
 const path = require("path");
+require('dotenv').config();
+const crypto = require("crypto-js");
+const SALT = process.env.SALT; 
 
 const profilesPath = path.join(__dirname, "../profiles/");
+
+const getHashedPassword = (password)=>{
+    const hashedPassword = crypto.SHA256(password, SALT, crypto.enc.Hex);
+    return hashedPassword;
+}
+
+
 const signinControler = async (req, res) => {
     const { profilePhoto } = req.files;
     const { name, phone, password, gmail } = req.body;
@@ -15,7 +25,7 @@ const signinControler = async (req, res) => {
                 name,
                 phone,
                 gmail,
-                password,
+                password: getHashedPassword(password), 
                 profile: profileString,
             });
             const responce = await user.save();

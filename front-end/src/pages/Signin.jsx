@@ -26,7 +26,7 @@ function Signin() {
         if(user){
             navigate("/chatpage");
         }
-    }, []);
+    }, [navigate]);
 
     // previewing the selected photo for profile
     const handleProfilePhoto = (e) => {
@@ -168,6 +168,7 @@ function Signin() {
                     type={isPasswordVisible ? "text" : "password"}
                     value={password}
                     placeholder="*password"
+                    autoComplete="password"
                     required
                     onChange={(e) => {
                         setPassword(e.target.value);

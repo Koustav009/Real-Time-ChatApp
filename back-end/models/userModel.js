@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 const validation = require("validator");
-const crypto = require("crypto-js");
-require("dotenv").config();
-const SALT = process.env.SALT;
 
 const defaultProfile =
     "https://www.pngitem.com/pimgs/m/146-1468281_profile-icon-png-transparent-profile-picture-icon-png.png";
@@ -67,15 +64,6 @@ const userSchema = mongoose.Schema({
             ref: "UserModel",
         },
     ],
-});
-
-userSchema.pre("save", async function (next) {
-    if (!this.isModified()) {
-        next();
-    }
-    const hashedPassword = crypto.SHA256(this.password, SALT, crypto.enc.Hex);
-    this.password = hashedPassword.toString(crypto.enc.Hex);
-    next();
 });
 
 const UserModel = mongoose.model("UserModel", userSchema);

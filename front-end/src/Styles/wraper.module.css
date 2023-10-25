@@ -21,6 +21,7 @@
   --profile-background-color: #90def1;
   --success-color: #4aac6c;
   --success-color-less: #4aac6cc6;
+  --message-area-header-color: #eaeaea;
 }
 
 ::selection {

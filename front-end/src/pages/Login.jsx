@@ -32,7 +32,6 @@ function Login() {
         e.preventDefault();
         setIsLoadding(true);
         const credentials = { phone, password };
-        console.log(credentials);
         try {
             const responce = await axios.get(API, {
                 params: credentials,
@@ -58,9 +57,10 @@ function Login() {
             </div>
             <div className="phone inputField">
                 <input
-                    type="text"
+                    type="number"
                     value={phone}
                     placeholder="*phone"
+                    autoComplete="phone no"
                     required
                     onChange={(e) => {
                         setPhone(e.target.value);
@@ -72,6 +72,7 @@ function Login() {
                     type={isPasswordVisible ? "text" : "password"}
                     value={password}
                     placeholder="*password"
+                    autoComplete="password"
                     required
                     onChange={(e) => {
                         setPassword(e.target.value);

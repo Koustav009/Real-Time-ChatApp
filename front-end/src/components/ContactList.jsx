@@ -12,6 +12,9 @@ import { auth } from "../Cookie/auth";
 import ProfileModal from "./modals/ProfileModal";
 import Loadding from "./modals/Loadding";
 import Success from "./modals/Success";
+import { ImCross } from "react-icons/im";
+import { MdOutlineGroupAdd } from "react-icons/md";
+import Contact from "./Contact";
 const API = "http://localhost:5500/getusercredential";
 
 const ContactList = () => {
@@ -19,11 +22,14 @@ const ContactList = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState(false);
     const [loadding, setLoadding] = useState(true);
-    const { user, setUser } = useContext(context);
+    const { user, setUser, contacts, setSelectedContact } = useContext(context);
     const [showProfile, setShowProfile] = useState(false);
     const [contactInputField, setContactInputField] = useState("");
     const [isAddContactModalVisible, setIsAddContactModalVisible] =
         useState(false);
+    const [isUserSearchName, setIsUserSearchName] = useState(false);
+    const [searchedContact, setSearchedContact] = useState([]);
+    const [exitSearchContact, setExitSearchContact] = useState(false);
 
     useEffect(() => {
         const token = getCookie("token");
@@ -63,11 +69,28 @@ const ContactList = () => {
 
     const searchContact = () => {
         if (contactInputField) {
-            alert(contactInputField);
+            setExitSearchContact(true);
+            setIsUserSearchName(true);
+            contacts.forEach((contact) => {
+                if (contact.phone === contactInputField) {
+                    setSearchedContact((prev) => contact);
+                    return 0;
+                }
+            });
         } else {
             alert("enter a valid name");
         }
     };
+
+    const closeSearchContact = () => {
+        setExitSearchContact(false);
+        setIsUserSearchName(false);
+    };
+
+    const handleSelectedContact = () => {
+        setSelectedContact(searchedContact);
+    };
+
     return (
         <div className="contactListArea">
             <div>
@@ -97,9 +120,17 @@ const ContactList = () => {
                         onClick={() => {
                             setIsAddContactModalVisible(true);
                         }}
-                        id="contactAddBtn"
+                        className="contactBtn"
                     >
                         <BiMessageSquareAdd />
+                    </button>
+                    <button
+                        className="contactBtn"
+                        onClick={() => {
+                            setIsAddContactModalVisible(true);
+                        }}
+                    >
+                        <MdOutlineGroupAdd />
                     </button>
                 </div>
                 <div id="contactSearchDiv">
@@ -107,49 +138,60 @@ const ContactList = () => {
                         type="text"
                         value={contactInputField}
                         onChange={handleSearchInput}
-                        placeholder="search contact"
+                        placeholder="search contact by number"
                         id="contactSearchInput"
                     />
-                    <FaSistrix id="searchIcon" onClick={searchContact} />
+                    {exitSearchContact ? (
+                        <ImCross id="searchIcon" onClick={closeSearchContact} />
+                    ) : (
+                        <FaSistrix id="searchIcon" onClick={searchContact} />
+                    )}
                 </div>
                 <h1 id="chatHeading">Chats</h1>
             </div>
-            <div className="chatListdiv">
-                <ul className="navigation">
-                    <li>
-                        <NavLink
-                            to="allchat"
-                            className={({ isActive }) =>
-                                isActive ? "active" : ""
-                            }
-                        >
-                            All
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink
-                            to="personalchat"
-                            className={({ isActive }) =>
-                                isActive ? "active" : ""
-                            }
-                        >
-                            Personal
-                        </NavLink>
-                    </li>
+            {isUserSearchName ? (
+                <Contact
+                    contact={searchedContact}
+                    onChildClick={handleSelectedContact}
+                />
+            ) : (
+                <div className="chatListdiv">
+                    <ul className="navigation">
+                        <li>
+                            <NavLink
+                                to="allchat"
+                                className={({ isActive }) =>
+                                    isActive ? "active" : ""
+                                }
+                            >
+                                All
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="personalchat"
+                                className={({ isActive }) =>
+                                    isActive ? "active" : ""
+                                }
+                            >
+                                Personal
+                            </NavLink>
+                        </li>
 
-                    <li>
-                        <NavLink
-                            to="groupchats"
-                            className={({ isActive }) =>
-                                isActive ? "active" : ""
-                            }
-                        >
-                            Group
-                        </NavLink>
-                    </li>
-                </ul>
-                <Outlet />
-            </div>
+                        <li>
+                            <NavLink
+                                to="groupchats"
+                                className={({ isActive }) =>
+                                    isActive ? "active" : ""
+                                }
+                            >
+                                Group
+                            </NavLink>
+                        </li>
+                    </ul>
+                    <Outlet />
+                </div>
+            )}
             {loadding && <Loadding />}
             {isAddContactModalVisible && (
                 <AddContactModal

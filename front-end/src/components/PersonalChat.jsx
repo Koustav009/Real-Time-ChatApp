@@ -5,7 +5,7 @@ import { getCookie } from "../Cookie/cookieConfigure";
 import Contact from "./Contact";
 
 const API = "http://localhost:5500/getallcontacts";
-const LIMIT = 10;
+const LIMIT = 4;
 function PersonalChat() {
     const {
         contacts,
@@ -30,7 +30,6 @@ function PersonalChat() {
                     limit: LIMIT,
                 },
             });
-            console.log(data.length);
             if (data.length === 0) {
                 setHasMore(false);
             }
@@ -77,17 +76,11 @@ function PersonalChat() {
         document
             .querySelector(".chatListdiv")
             .addEventListener("scroll", handleScroll);
-        return () => {
-            document
-                .querySelector(".chatListdiv")
-                .removeEventListener("scroll", handleScroll);
-        };
     }, [handleScroll]);
 
     const handleSelectedContact = (contact) => {
         setSelectedContact(contact);
     };
-
     return (
         <div className="chatlist">
             {contacts.map((contact, index) => {

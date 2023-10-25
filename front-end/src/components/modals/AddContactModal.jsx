@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import "../../Styles/addContactModal.css";
 import { ImCross } from "react-icons/im";
 import axios from "axios";
 import { getCookie } from "../../Cookie/cookieConfigure";
-// import { context } from "../../context/UserContext";
 
 const API = "http://localhost:5500/contact/addcontact";
 
@@ -18,13 +17,13 @@ function AddContactModal({ closeModal, handleError, handleSuccess }) {
         try {
             await axios.post(API, payload, {
                 headers: {
-                    "Authorization": `Bearer ${getCookie("token")}`,
+                    Authorization: `Bearer ${getCookie("token")}`,
                 },
             });
             closeModal(false);
             handleSuccess(true);
         } catch (error) {
-            closeModal(false);  
+            closeModal(false);
             handleError(error.response.data);
         }
     };

@@ -28,7 +28,6 @@ const messageSchema = Schema({
     messageStatus: {
         type: Boolean,
         default: false,
-        required: true,
     },
 });
 

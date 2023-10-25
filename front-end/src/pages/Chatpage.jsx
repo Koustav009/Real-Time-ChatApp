@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileArea from "../components/ProfileArea";
 import MessageArea from "../components/MessageArea";

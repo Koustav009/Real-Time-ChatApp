@@ -42,10 +42,9 @@ const addContact = async (req, res) => {
             ]
             const conversation = new ConversationModel({
                 participants,
+                isGroupChat: false,
             });
-            const responce = await conversation.save();
-            const popu = await responce.populate({path: "participants"});
-
+            await conversation.save();
             return res.status(200).send("contact added successfull");
         } else {
             return res.status(409).send("all already exists");

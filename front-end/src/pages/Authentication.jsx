@@ -1,10 +1,9 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logo from "../Media/chat.png";
 import "../Styles/authentication.css";
 
 function Authentication() {
-    const [modalVisible, setModalVisible] = useState(true);
     return (
         <div className="authenticationDiv">
             <img src={logo} alt="logo" />
