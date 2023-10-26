@@ -7,6 +7,7 @@ const signinControler = require("../controlers/signinControler");
 const getusercredential = require("../controlers/getusercredential");
 const createGroupControler = require("../controlers/createGroupControler");
 const getallcontactControler = require("../controlers/getallcontactControler");
+const searchControler = require("../controlers/searchControler");
 const router = express.Router();
 
 router.use(fileupload());
@@ -17,6 +18,7 @@ router.post("/contact/addcontact", auth, addContact);
 router.get("/getusercredential", auth, getusercredential);
 router.get("/getallcontacts", auth, getallcontactControler);
 router.post("/contact/createGroup", auth, createGroupControler);
+router.get("/contact/searchuser", auth, searchControler);
 router.all("*", (req, res) => res.status(404).send("not found"));
 
 module.exports = router;

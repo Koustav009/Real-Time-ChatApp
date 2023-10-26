@@ -1,4 +1,3 @@
-const { set, get } = require("mongoose");
 const UserModel = require("../models/userModel");
 const getFile = require("../helper/getFile");
 

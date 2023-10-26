@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import soundFile from "../../Media/error.mp3";
 import "../../Styles/errormodal_successmodal.css";
 
-const ErrorModal = ({ closeModal, handleError, errorMsg }) => {
+const ErrorModal = ({ handleError, errorMsg }) => {
     useEffect(() => {
         const sound = new Audio(soundFile);
         sound.play();

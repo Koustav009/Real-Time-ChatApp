@@ -2,7 +2,13 @@ import React, { useState, useContext, useEffect } from "react";
 import "../Styles/contactList.css";
 import { FaSistrix } from "react-icons/fa6";
 import { BiMessageSquareAdd } from "react-icons/bi";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import {
+    NavLink,
+    Outlet,
+    useAsyncError,
+    useNavigate,
+    useSearchParams,
+} from "react-router-dom";
 import AddContactModal from "./modals/AddContactModal";
 import { context } from "../context/UserContext";
 import ErrorModal from "./modals/ErrorModal";
@@ -15,6 +21,7 @@ import Success from "./modals/Success";
 import { ImCross } from "react-icons/im";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import Contact from "./Contact";
+import CreateGroup from "./modals/CreateGroup";
 const API = "http://localhost:5500/getusercredential";
 
 const ContactList = () => {
@@ -30,6 +37,10 @@ const ContactList = () => {
     const [isUserSearchName, setIsUserSearchName] = useState(false);
     const [searchedContact, setSearchedContact] = useState([]);
     const [exitSearchContact, setExitSearchContact] = useState(false);
+    const [isSearchLoadding, setIsSearchLoadding] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errormsg, setErrormsg] = useState("");
+    const [isCreateGroupModalVisible, setIsCreateGroupModalVisible] = useState(false);
 
     useEffect(() => {
         const token = getCookie("token");
@@ -56,6 +67,7 @@ const ContactList = () => {
                 );
                 setUser({ profile: profilePhotoLink, ...credential });
             } catch (error) {
+                setIsError(true);
                 console.log(error);
             }
             setLoadding(false);
@@ -67,16 +79,55 @@ const ContactList = () => {
         setContactInputField(e.target.value);
     };
 
-    const searchContact = () => {
+    const searchContact = async () => {
         if (contactInputField) {
+            setIsSearchLoadding(true);
             setExitSearchContact(true);
             setIsUserSearchName(true);
-            contacts.forEach((contact) => {
-                if (contact.phone === contactInputField) {
+            if (contacts.length) {
+                contacts.forEach((contact) => {
+                    if (contact.phone === contactInputField) {
+                        setSearchedContact((prev) => contact);
+                        console.log(contact);
+                        return 0;
+                    }
+                });
+            } else {
+                const payload = {
+                    phone: contactInputField,
+                };
+                const endPoint = "http://localhost:5500/contact/searchuser";
+                try {
+                    const responce = await axios.get(endPoint, {
+                        headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                        params: payload,
+                    });
+                    const unit8Array = new Uint8Array(
+                        responce.data.profile.data
+                    );
+                    const profileLink = URL.createObjectURL(
+                        new Blob([unit8Array])
+                    );
+                    const { name, gmail, lastActive, phone, status } =
+                        responce.data;
+                    const contact = {
+                        name,
+                        gmail,
+                        phone,
+                        status,
+                        lastActive,
+                        profile: profileLink,
+                    };
                     setSearchedContact((prev) => contact);
-                    return 0;
+                } catch (error) {
+                    console.log(error);
+                    setErrormsg(error.response.data || "not found");
+                    setIsError(true);
                 }
-            });
+            }
+            setIsSearchLoadding(false);
         } else {
             alert("enter a valid name");
         }
@@ -85,10 +136,18 @@ const ContactList = () => {
     const closeSearchContact = () => {
         setExitSearchContact(false);
         setIsUserSearchName(false);
+        setSearchedContact([]);
     };
 
     const handleSelectedContact = () => {
         setSelectedContact(searchedContact);
+    };
+
+    const closeErrorModel = (value) => {
+        setIsError(value);
+        setExitSearchContact(false);
+        setIsUserSearchName(false);
+        setSearchedContact([]);
     };
 
     return (
@@ -127,7 +186,7 @@ const ContactList = () => {
                     <button
                         className="contactBtn"
                         onClick={() => {
-                            setIsAddContactModalVisible(true);
+                            setIsCreateGroupModalVisible(true);
                         }}
                     >
                         <MdOutlineGroupAdd />
@@ -149,6 +208,10 @@ const ContactList = () => {
                 </div>
                 <h1 id="chatHeading">Chats</h1>
             </div>
+            {isSearchLoadding && <Loadding />}
+            {isError && (
+                <ErrorModal errorMsg={errormsg} handleError={closeErrorModel} />
+            )}
             {isUserSearchName ? (
                 <Contact
                     contact={searchedContact}
@@ -208,6 +271,7 @@ const ContactList = () => {
                 />
             )}
             {showProfile && <ProfileModal closeModal={setShowProfile} />}
+            {isCreateGroupModalVisible && <CreateGroup />}
         </div>
     );
 };
