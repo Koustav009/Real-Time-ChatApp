@@ -4,45 +4,53 @@ const ConversationModel = require("../models/conversationModel");
 const GroupModel = require("../models/groupModel");
 
 const createGroupControler = async (req, res) => {
-    // remove me
-    const payload = {
-        numbers: [9641462817, 9641462811, 9641462812, 9641462813, 9641462814],
-        groupName: "codding hub",
-    };
-
-    // addmin id
-    const userId = req.user.id;
     try {
         const { groupName, numbers } = req.body;
         const participants = [];
-        for(i in numbers){
-            const id = await UserModel.find({phone: i})
-            participants.push(new ObjectId (id)); 
+
+        // getting all the participants _id
+        const ownUser = await UserModel.findOne({ _id: req.user.id }).select(
+            "groupList"
+        );
+        participants.push(ownUser);
+
+        for (let i = 0; i < numbers.length; i++) {
+            const user = await UserModel.findOne({ phone: numbers[i] }).select("groupList");
+            participants.push(user);
         }
-        console.log(participants);
+
+        const participantsPhone = participants.map(
+            (participant) => participant._id
+        );
+        participantsPhone.push(req.user._id);
+
+        // creating the Conversation Model
         const newConversationModel = new ConversationModel({
-            participants,
+            participants: participantsPhone,
             isGroupChat: true,
         });
         const conversationModelResponce = await newConversationModel.save();
-        console.log(conversationModelResponce);
 
+        // creating new group
         const newGroupModel = new GroupModel({
             name: groupName,
             conversasionId: conversationModelResponce._id,
-            admin: new ObjectId(userId),
-        })
+            admin: new ObjectId(req.user.id),
+        });
 
         const responce = await newGroupModel.save();
-        console.log(responce);
-        if(!responce){
+
+        // adding group id to all the participant's users document
+        participants.map(async (participant) => {
+            participant.groupList.push(new ObjectId(responce._id));
+            await participant.save();
+        });
+
+        if (!responce) {
             throw new Error("can't create group");
         }
         return res.status(201).send("group created successfull...");
-
     } catch (error) {
-        console.log(error);
-        console.log(error.message);
         return res.status(404).send(error.message);
     }
 };

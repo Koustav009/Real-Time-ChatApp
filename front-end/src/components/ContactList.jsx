@@ -2,13 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import "../Styles/contactList.css";
 import { FaSistrix } from "react-icons/fa6";
 import { BiMessageSquareAdd } from "react-icons/bi";
-import {
-    NavLink,
-    Outlet,
-    useAsyncError,
-    useNavigate,
-    useSearchParams,
-} from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import AddContactModal from "./modals/AddContactModal";
 import { context } from "../context/UserContext";
 import ErrorModal from "./modals/ErrorModal";
@@ -40,7 +34,8 @@ const ContactList = () => {
     const [isSearchLoadding, setIsSearchLoadding] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errormsg, setErrormsg] = useState("");
-    const [isCreateGroupModalVisible, setIsCreateGroupModalVisible] = useState(false);
+    const [isCreateGroupModalVisible, setIsCreateGroupModalVisible] =
+        useState(false);
 
     useEffect(() => {
         const token = getCookie("token");
@@ -148,6 +143,10 @@ const ContactList = () => {
         setExitSearchContact(false);
         setIsUserSearchName(false);
         setSearchedContact([]);
+    };
+
+    const closeModal = () => {
+        setIsCreateGroupModalVisible((prev) => false);
     };
 
     return (
@@ -271,7 +270,9 @@ const ContactList = () => {
                 />
             )}
             {showProfile && <ProfileModal closeModal={setShowProfile} />}
-            {isCreateGroupModalVisible && <CreateGroup />}
+            {isCreateGroupModalVisible && (
+                <CreateGroup closeModal={closeModal}/>
+            )}
         </div>
     );
 };
