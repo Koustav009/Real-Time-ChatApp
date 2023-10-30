@@ -20,7 +20,7 @@ const App = () => {
                             <Route path="signin" element={<Signin />} />
                         </Route>
                         <Route path="/chatpage" element={<Chatpage />}>
-                            <Route index element={<AllChat />} />
+                            <Route index element={<PersonalChat />} />
                             <Route path="allchat" element={<AllChat />} />
                             <Route
                                 path="personalchat"

@@ -21,7 +21,7 @@ function PersonalChat() {
     const fetchData = useCallback(async () => {
         try {
             setLoadding(true);
-            const { data } = await axios.get(API, {
+            const responce = await axios.get(API, {
                 headers: {
                     Authorization: `Bearer ${getCookie("token")}`,
                 },
@@ -30,19 +30,20 @@ function PersonalChat() {
                     limit: LIMIT,
                 },
             });
-            if (data.length === 0) {
+            if (!responce) throw new Error("error in fetching contacts");
+            if (responce.data.length === 0) {
                 setHasMore(false);
             }
 
             // setting the contacts with profile photo
             setContacts((prevContacts) => {
-                data.map((contact) => {
+                responce.data.map((contact) => {
                     const unit8array = new Uint8Array(contact.profile.data);
                     const blobData = new Blob([unit8array]);
                     contact.profile = URL.createObjectURL(blobData);
                     return null;
                 });
-                return [...prevContacts, ...data];
+                return [...prevContacts, ...responce.data];
             });
             setPage((prev) => prev + 1);
             setLoadding(false);

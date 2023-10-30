@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const getFile = require("../helper/getFile");
+const { getFile } = require("../helper/getFile");
 
 const getallcontactControler = async (req, res, err) => {
     const { page, limit } = req.query;

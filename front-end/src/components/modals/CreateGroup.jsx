@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import { ImCross } from "react-icons/im";
 import { GoPersonAdd } from "react-icons/go";
 import "../../Styles/createGroupModal.css";
@@ -7,6 +7,7 @@ import axios from "axios";
 import { context } from "../../context/UserContext";
 import Loadding from "../modals/Loadding";
 import ErrorModal from "./ErrorModal";
+import defaultPtofile from "../../Media/profile.png";
 
 const CreateGroup = ({ closeModal }) => {
     const { contacts } = useContext(context);
@@ -17,6 +18,9 @@ const CreateGroup = ({ closeModal }) => {
     const [isLoadding, setIsLoadding] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [profile, setProfile] = useState("");
+    const [fileData, setFileData] = useState(null);
+    const fileInputRef = useRef("");
 
     const ContactModal = ({ contact, onChildClick }) => {
         return (
@@ -54,6 +58,7 @@ const CreateGroup = ({ closeModal }) => {
                     return 0;
                 }
             });
+            setIsLoadding(false);
         } else {
             const endPoint = "http://localhost:5500/contact/searchuser";
             try {
@@ -71,9 +76,11 @@ const CreateGroup = ({ closeModal }) => {
                 const profilePhotoLink = URL.createObjectURL(
                     new Blob([unit8Array])
                 );
+                console.log(responce);
                 const user = {
                     profile: profilePhotoLink,
                     name: responce.data.name,
+                    phone: responce.data.phone,
                 };
                 setSelectedContact((prev) => [...new Set([...prev, user])]);
                 setIsLoadding(false);
@@ -83,6 +90,17 @@ const CreateGroup = ({ closeModal }) => {
             }
         }
     };
+
+    const getInputFile = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleFile = (e) => {
+        const profileLink = URL.createObjectURL(e.target.files[0]);
+        setProfile(profileLink);
+        setFileData(e.target.files[0]);
+    };
+
     const handleClick = ({ name }) => {
         setSelectedContact((prev) =>
             selectedContact.filter((contact) => contact.name !== name)
@@ -90,19 +108,21 @@ const CreateGroup = ({ closeModal }) => {
     };
 
     const handleCreateGroup = async () => {
-        if (!groupName) {
-            alert("enter a group name");
+        if (!(groupName && selectedContact.length && fileData)) {
+            alert("some input field is empty");
             return 0;
         }
         try {
             setIsLoadding(true);
             const endPoint = "http://localhost:5500/contact/createGroup";
-            const payload = {
-                groupName,
-                numbers: selectedContact.map((contact) => contact.phone),
-            };
-
-            const responce = await axios.post(endPoint, payload, {
+            const fromData = new FormData();
+            fromData.set("groupName", groupName);
+            fromData.set(
+                "numbers",
+                selectedContact.map((contact) => contact.phone)
+            );
+            fromData.set("profile", fileData);
+            const responce = await axios.post(endPoint, fromData, {
                 headers: {
                     Authorization: `Bearer ${getCookie("token")}`,
                 },
@@ -113,6 +133,7 @@ const CreateGroup = ({ closeModal }) => {
         } catch (error) {
             setIsLoadding(false);
             setIsError(true);
+            console.log(error);
             setErrorMsg(error.message);
         }
     };
@@ -127,6 +148,25 @@ const CreateGroup = ({ closeModal }) => {
                         onClick={() => {
                             closeModal();
                         }}
+                    />
+                </div>
+                <div className="profile-area">
+                    <img
+                        src={profile ? profile : defaultPtofile}
+                        alt="profile"
+                        width={100}
+                        className="group-profile"
+                        onClick={getInputFile}
+                        name="profilePhoto"
+                    />
+                    <input
+                        type="file"
+                        name="profile"
+                        className="group-profile-input"
+                        accept="image/*"
+                        hidden
+                        onChange={handleFile}
+                        ref={fileInputRef}
                     />
                 </div>
                 <div className="create-group-modal-body">

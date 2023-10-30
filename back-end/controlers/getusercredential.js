@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const getFile = require("../helper/getFile");
+const { getFile } = require("../helper/getFile");
 
 const getusercredential = async (req, res) => {
     const phone = req.user.phone;

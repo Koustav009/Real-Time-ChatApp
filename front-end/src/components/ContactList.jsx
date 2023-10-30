@@ -63,6 +63,7 @@ const ContactList = () => {
                 setUser({ profile: profilePhotoLink, ...credential });
             } catch (error) {
                 setIsError(true);
+                setErrormsg(error.message);
                 console.log(error);
             }
             setLoadding(false);

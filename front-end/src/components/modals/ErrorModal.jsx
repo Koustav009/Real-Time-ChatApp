@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
-import soundFile from "../../Media/error.mp3";
+import React from "react";
 import "../../Styles/errormodal_successmodal.css";
 
 const ErrorModal = ({ handleError, errorMsg }) => {
-    useEffect(() => {
-        const sound = new Audio(soundFile);
-        sound.play();
-    }, []);
     return (
         <div className="errormodal-background">
             <div className="errormodal">

@@ -6,6 +6,8 @@ export const UserContext = ({ children }) => {
     const [user, setUser] = useState();
     const [selectedContact, setSelectedContact] = useState();
     const [contacts, setContacts] = useState([]);
+    const [groups, setGroups] = useState([]);
+    const [allChats, setAllChats] = useState([]);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     return (
@@ -21,6 +23,10 @@ export const UserContext = ({ children }) => {
                 setPage,
                 hasMore,
                 setHasMore,
+                groups,
+                setGroups,
+                allChats,
+                setAllChats,
             }}
         >
             {children}

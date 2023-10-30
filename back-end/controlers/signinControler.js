@@ -4,13 +4,12 @@ require('dotenv').config();
 const crypto = require("crypto-js");
 const SALT = process.env.SALT; 
 
-const profilesPath = path.join(__dirname, "../profiles/");
+const profilesPath = path.join(process.cwd(), "../profiles/");
 
 const getHashedPassword = (password)=>{
     const hashedPassword = crypto.SHA256(password, SALT, crypto.enc.Hex);
     return hashedPassword;
 }
-
 
 const signinControler = async (req, res) => {
     const { profilePhoto } = req.files;

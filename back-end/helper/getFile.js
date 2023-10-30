@@ -3,8 +3,14 @@ const path = require("path");
 
 const getFile = (fileName) => {
     const filePath = path.join(process.cwd(), "profiles", fileName);
-    const file = fs.readFileSync(filePath); 
+    const file = fs.readFileSync(filePath);
     return file;
 };
 
-module.exports = getFile;
+const getGroupFile = (fileName) => {
+    const filePath = path.join(process.cwd(), "groupProfiles", fileName);
+    const file = fs.readFileSync(filePath);
+    return file;
+};
+
+module.exports = {getFile, getGroupFile};

@@ -16,12 +16,7 @@ const MessageArea = () => {
 
     const [message, setMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-    useEffect(() => {
-        // console.log(selectedContact);
-        // console.log("selected contact changed...");
-    }, [selectedContact]);
-
+    
     return (
         <div
             className="message-container"

@@ -61,7 +61,7 @@ const userSchema = mongoose.Schema({
     groupList: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "UserModel",
+            ref: "GroupSchema",
         },
     ],
 });

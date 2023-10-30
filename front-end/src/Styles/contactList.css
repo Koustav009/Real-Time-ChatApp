@@ -6,13 +6,13 @@
     position: relative;
 }
 
-.contactLlstHead{
+.contactLlstHead {
     display: flex;
     justify-content: space-between;
     gap: 5px;
 }
 
-.contactLlstHead .profile{
+.contactLlstHead .profile {
     width: 3rem;
     height: 3rem;
     background-color: transparent;
@@ -20,13 +20,13 @@
     border: none;
     border: 1px solid var(--text-color-less);
     border-radius: 50%;
-    object-fit:cover;
+    object-fit: cover;
     object-position: center;
     overflow: hidden;
     cursor: pointer;
 }
 
-.contactLlstHead .user-name{
+.contactLlstHead .user-name {
     margin-block: auto;
     margin-right: auto;
     color: var(--text-color);
@@ -141,25 +141,32 @@
     margin-bottom: auto;
 }
 
-.contact *{
+.contact * {
     pointer-events: none;
 }
 
-.contact div{
+.contact div {
     padding-inline: 6px;
 }
 
-.contact:hover {
+.contact:hover,
+.group-contact:hover{
     background-color: var(--contact-list-hover-color);
 }
 
-.status {
+.status, .group-contact .time{
     margin-left: auto;
 }
-.onlineIndecator{
+
+.status, .group-contact .time{
+    font-size: small;
+}
+
+.onlineIndecator {
     position: relative;
 }
-.onlineIndecator:after{
+
+.onlineIndecator:after {
     content: "";
     position: absolute;
     width: 10px;
@@ -167,29 +174,33 @@
     border-radius: 50%;
     background-color: var(--online-indecator);
 }
-.lastseen{
+
+.lastseen {
     font-size: small;
 }
 
-.profileImg img{
+.profileImg img {
     width: 35px;
     height: 35px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center;
 }
-.contact-info .name{
+
+.contact-info .name, 
+.group-contact .group-info .name{
     width: 50%;
     font-size: 1rem;
     text-overflow: ellipsis;
 }
 
-.contact-info .lastmessage{
+.contact-info .lastmessage,
+.group-contact .group-info .lastmessage{
     font-size: .8rem;
     color: var(--text-color-less);
 }
 
-.contactBtn{
+.contactBtn {
     cursor: pointer;
     padding: 10px;
     outline: none;
@@ -198,10 +209,22 @@
     background-color: transparent;
     transform: color 1s;
 }
-.contactBtn *{
+
+.contactBtn * {
     font-size: 2rem;
 }
 
-.contactBtn:is(:hover, :focus){
+.contactBtn:is(:hover, :focus) {
     color: var(--text-color);
+}
+
+.group-contact {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    cursor: pointer;
+    transition: all .3s linear;
+    border-radius: 10px;
 }

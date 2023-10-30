@@ -67,8 +67,35 @@
     color: var(--text-color);
 }
 
+.profile-area .profile-body .group-participant-contact{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-area .profile-body .group-participant-contact:hover{
+    background-color: var(--contact-list-hover-color);
+}
+
+.profile-area .profile-body .group-participant-contact > img{
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
 .profile-area .profile-footer{
     color: red;
+}
+.profile-area .profile-body .group-participant-contact > p{
+    font-size: small;
+    text-transform: lowercase;
 }
 
 .profile-area .profile-footer :is(.profile-block, .profile-chat){
@@ -83,4 +110,17 @@
 .profile-area .profile-footer :is(.profile-block, .profile-chat):hover{
     background-color: #7ec9dc;
     transition: all .3s linear;
+}
+
+.profile-area .profile-footer .profile-exit{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 5px;
+    padding: 5px;
+    border-radius: 10px;
+}
+.profile-area .profile-footer .profile-exit:hover{
+    background-color: var(--contact-list-hover-color);
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import defaultPtofile from "../Media/profile.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa6";
@@ -18,6 +18,7 @@ function Signin() {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const [isLoadding, setLoadding] = useState(false);
     const navigate = useNavigate();
+    const fileInputRef = useRef("");
 
     // cheacking if the user has his sassion
     useEffect(() => {
@@ -39,7 +40,7 @@ function Signin() {
 
     // removing the default file input btn
     const getInputFile = () => {
-        document.querySelector(".file-input").click();
+        fileInputRef.current.click();
     };
 
     // preventing the default beheaver of button on form
@@ -118,6 +119,7 @@ function Signin() {
                 accept="image/*"
                 onChange={handleProfilePhoto}
                 hidden
+                ref={fileInputRef}
                 className="file-input"
             />
             <div className="firstName inputField">
