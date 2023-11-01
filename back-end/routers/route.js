@@ -2,7 +2,9 @@ const express = require("express");
 const auth = require("../meddleware/auth");
 const fileupload = require("express-fileupload");
 const addContact = require("../controlers/addContact");
+const deleteChat = require("../controlers/deleteChat");
 const loginControler = require("../controlers/loginControler");
+const findCommonGroup = require("../controlers/findCommonGroup");
 const signinControler = require("../controlers/signinControler");
 const searchControler = require("../controlers/searchControler");
 const findUserByNumber = require("../controlers/findUserByNumber");
@@ -23,6 +25,8 @@ router.get("/getusercredential", auth, getusercredential);
 router.get("/getallcontacts", auth, getallcontactControler);
 router.post("/contact/createGroup", auth, createGroupControler);
 router.get("/contact/findUserByNumber", auth, findUserByNumber);
+router.get("/contact/findCommonGroup", auth, findCommonGroup);
+router.delete("/contact/deleteChat", auth, deleteChat)
 router.all("*", (req, res) => res.status(404).send("not found"));
 
 module.exports = router;

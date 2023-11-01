@@ -4,19 +4,22 @@ import "../Styles/profileArea.css";
 import { FaArrowCircleRight, FaInfo } from "react-icons/fa";
 import { GoCircleSlash } from "react-icons/go";
 import { MdDelete } from "react-icons/md";
-import { GrGroup } from "react-icons/gr";
+import { GrGroup, GrOpera } from "react-icons/gr";
 import { RxExit } from "react-icons/rx";
 import "../Styles/profileArea.css";
 import axios from "axios";
 import { getCookie } from "../Cookie/cookieConfigure";
 import Loadding from "./modals/Loadding";
+import GroupContact from "../components/GroupContact";
 
 function ProfileArea() {
-    const { selectedContact, setSelectedContact } = useContext(context);
+    const { selectedContact, setSelectedContact, contacts, setContacts } =
+        useContext(context);
     const [allParticipantsDetails, setAllParticipantsDetails] = useState([]);
     const [isLoadding, setIsLoading] = useState(false);
+    const [commonGroups, setCommonGroup] = useState([]);
 
-    const fetchData = async () => {
+    const fetchDataForGroup = async () => {
         const endPoint = "http://localhost:5500/contact/findUserByNumber";
         const numbers = [
             ...new Set(
@@ -46,9 +49,38 @@ function ProfileArea() {
         }
     };
 
+    const fetchCommonGroup = async () => {
+        const endPoint = "http://localhost:5500/contact/findCommonGroup";
+        try {
+            setIsLoading(true);
+            const responce = await axios.get(endPoint, {
+                headers: {
+                    authorization: `Bearer ${getCookie("token")}`,
+                },
+                params: { phone: selectedContact.phone },
+            });
+            if (!responce) {
+                throw new Error("not found");
+            }
+            responce.data.map((group) => {
+                group.profile = URL.createObjectURL(
+                    new Blob([new Uint8Array(group.profile.data)])
+                );
+            });
+            console.log(responce.data);
+            setCommonGroup((prev) => responce.data);
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         if (selectedContact && selectedContact.isGroupChat) {
-            fetchData();
+            fetchDataForGroup();
+        } else if (selectedContact && !selectedContact.isGroupChat) {
+            fetchCommonGroup();
         }
     }, [selectedContact]);
 
@@ -58,6 +90,44 @@ function ProfileArea() {
 
     const handleExitClick = () => {
         alert("exit");
+    };
+
+    const handleBlockChat = () => {
+        alert("blocked");
+    };
+
+    const handleDeleteChat = async () => {
+        const endPoint = "http://localhost:5500/contact/deleteChat";
+        try {
+            setIsLoading(true);
+            const responce = await axios.delete(endPoint, {
+                headers: {
+                    authorization: `Bearer ${getCookie("token")}`,
+                },
+                params: {
+                    phone: selectedContact.phone,
+                },
+            });
+            if (!responce) {
+                throw new Error("error in fetching data");
+            }
+            console.log(contacts);
+            setContacts((prev) => {
+                return [
+                    ...new Set(
+                        contacts.filter((contact) => {
+                            return contact.phone !== selectedContact.phone;
+                        })
+                    ),
+                ];
+            });
+            setSelectedContact((prev) => null);
+            console.log(contacts);
+            setIsLoading(false);
+        } catch (error) {
+            setIsLoading(false);
+            console.log(error);
+        }
     };
 
     return (
@@ -84,6 +154,7 @@ function ProfileArea() {
                             </div>
                         </div>
                         <div className="profile-body">
+                            <p className="profile-body-header">participants</p>
                             {allParticipantsDetails.map(
                                 (participant, index) => {
                                     return (
@@ -147,20 +218,29 @@ function ProfileArea() {
                         </div>
                         <div className="profile-info-match">
                             <p className="group-info">
-                                <GrGroup /> Groups in common
+                                <GrGroup className="group-icon" />
+                                <span>Groups in common</span>
                             </p>
                             <div className="groups-name">
-                                {/* fetch data from API*/}
+                                {commonGroups &&
+                                    commonGroups.map((group, index) => {
+                                        return (
+                                            <GroupContact
+                                                key={index}
+                                                handleChildClick={
+                                                    handleChildClick
+                                                }
+                                                group={group}
+                                            />
+                                        );
+                                    })}
                             </div>
                         </div>
                         <div className="profile-footer">
-                            <div className="profile-block">
-                                <GoCircleSlash />
-                                <p className="block-text">
-                                    Block {selectedContact.name.toLowerCase()}
-                                </p>
-                            </div>
-                            <div className="profile-chat">
+                            <div
+                                className="profile-chat"
+                                onClick={handleDeleteChat}
+                            >
                                 <MdDelete />
                                 <p className="block-text">Delete chat</p>
                             </div>

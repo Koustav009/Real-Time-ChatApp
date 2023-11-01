@@ -20,6 +20,7 @@ function AddContactModal({ closeModal, handleError, handleSuccess }) {
                     Authorization: `Bearer ${getCookie("token")}`,
                 },
             });
+            window.location.reload(false);
             closeModal(false);
             handleSuccess(true);
         } catch (error) {

@@ -191,6 +191,8 @@
 .group-contact .group-info .name{
     width: 50%;
     font-size: 1rem;
+    text-wrap: nowrap;
+    color: var(--text-color);
     text-overflow: ellipsis;
 }
 
@@ -227,4 +229,8 @@
     cursor: pointer;
     transition: all .3s linear;
     border-radius: 10px;
+}
+
+.group-contact .group-info{
+
 }
