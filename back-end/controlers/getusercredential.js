@@ -16,6 +16,7 @@ const getusercredential = async (req, res) => {
                 name: responce.name,
                 phone: responce.phone,
                 gmail: responce.gmail,
+                about: responce.about,
             },
         });
     } catch (error) {

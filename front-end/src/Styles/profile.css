@@ -53,7 +53,7 @@
     opacity: .2;
 }
 
-.profile-div .profile-pic .pic {
+.profile-div .profile-pic .pic>img {
     width: 6rem;
     height: 6rem;
     border-radius: 50%;
@@ -61,10 +61,6 @@
     object-fit: cover;
     object-position: center;
     border: 1px solid black;
-}
-
-.profile-div .profile-pic .pic>img {
-    width: 100%;
 }
 
 .profile-div .profile-pic .profile-camera {
@@ -103,4 +99,67 @@
 
 .profile-div .profile-info>div .info-value {
     color: var(--text-color);
+}
+
+.profile-div .profile-footer {
+    display: grid;
+    grid-template-columns: repeat(1fr);
+    gap: 5px;
+    margin-inline: 5px;
+}
+
+.profile-div .profile-footer .profile-footer-logout {
+    border-radius: 5px;
+    background-color: var(--error-color);
+    padding: 5px;
+    opacity: .9;
+    font-size: medium;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.profile-div .profile-footer .profile-footer-logout:hover {
+    opacity: 1;
+}
+
+.profile-div .profile-footer .profile-footer-logout {
+    background-color: var(--profile-background-color);
+}
+
+
+.profile-div :is(.edit-name, .edit-about) {
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(5px);
+    display: grid;
+    place-content: center;
+    gap: 10px;
+}
+
+.profile-div :is(.edit-name, .edit-about)>.cross-btn {
+    cursor: pointer;
+}
+
+.profile-div :is(.edit-name, .edit-about)> :is(input, button) {
+    padding: 5px;
+    font-size: calc(1rem + 5px);
+    outline: none;
+    border: none;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+
+.profile-div :is(.edit-name, .edit-about)>button {
+    background-color: var(--info-text-color);
+    opacity: .8;
+    cursor: pointer;
+}
+
+.profile-div :is(.edit-name, .edit-about)>button:hover {
+    opacity: 1;
+}
+
+.profile-div :is(.edit-name, .edit-about)>button:focus {
+    opacity: 1;
+    outline: 1px solid black;
 }

@@ -12,6 +12,9 @@ const getGroupControler = require("../controlers/getGroupControler");
 const getusercredential = require("../controlers/getusercredential");
 const createGroupControler = require("../controlers/createGroupControler");
 const getallcontactControler = require("../controlers/getallcontactControler");
+const changeAboutControler = require("../controlers/changeAboutControler");
+const changeNameControler = require("../controlers/changeNameControler");
+const changeProfileControler = require("../controlers/changeProfileControler");
 const router = express.Router();
 
 router.use(fileupload());
@@ -27,6 +30,9 @@ router.post("/contact/createGroup", auth, createGroupControler);
 router.get("/contact/findUserByNumber", auth, findUserByNumber);
 router.get("/contact/findCommonGroup", auth, findCommonGroup);
 router.delete("/contact/deleteChat", auth, deleteChat)
+router.put("/contact/update/about", auth, changeAboutControler);
+router.put("/contact/update/name", auth, changeNameControler);
+router.put("/contact/update/profile", auth, changeProfileControler);
 router.all("*", (req, res) => res.status(404).send("not found"));
 
 module.exports = router;

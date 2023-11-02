@@ -67,12 +67,10 @@ function ProfileArea() {
                     new Blob([new Uint8Array(group.profile.data)])
                 );
             });
-            console.log(responce.data);
             setCommonGroup((prev) => responce.data);
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
-            console.log(error);
         }
     };
 

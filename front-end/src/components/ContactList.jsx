@@ -172,7 +172,6 @@ const ContactList = () => {
                     </button>
                     <p className="user-name">
                         {user?.name
-                            .slice(0, user.name.indexOf(" "))
                             .toLowerCase()}
                     </p>
                     <button

@@ -48,6 +48,10 @@ const userSchema = mongoose.Schema({
             message: "{VALUE} is not supported",
         },
     },
+    about: {
+        type: String,
+        default: "i am using chat hub",
+    },
     lastActive: {
         type: Date,
         default: new Date(),
