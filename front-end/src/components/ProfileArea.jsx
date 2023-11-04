@@ -13,7 +13,7 @@ import Loadding from "./modals/Loadding";
 import GroupContact from "../components/GroupContact";
 
 function ProfileArea() {
-    const { selectedContact, setSelectedContact, contacts, setContacts } =
+    const { selectedContact, setSelectedContact, contacts, setContacts, user } =
         useContext(context);
     const [allParticipantsDetails, setAllParticipantsDetails] = useState([]);
     const [isLoadding, setIsLoading] = useState(false);
@@ -83,15 +83,13 @@ function ProfileArea() {
     }, [selectedContact]);
 
     const handleChildClick = (contact) => {
-        setSelectedContact(contact);
+        if (contact.phone !== user.phone) {
+            setSelectedContact(contact);
+        }
     };
 
-    const handleExitClick = () => {
-        alert("exit");
-    };
-
-    const handleBlockChat = () => {
-        alert("blocked");
+    const handleExitClick = async () => {
+        alert("comming soon");
     };
 
     const handleDeleteChat = async () => {
@@ -206,11 +204,7 @@ function ProfileArea() {
                             <div className="about">
                                 <p className="about-head">About</p>
                                 <p className="about-value">
-                                    {selectedContact?.about ? (
-                                        selectedContact.about
-                                    ) : (
-                                        <>hey i am using chatHub</>
-                                    )}
+                                    {selectedContact.about}
                                 </p>
                             </div>
                         </div>

@@ -14,9 +14,10 @@ import "../Styles/message-area.css";
 const MessageArea = () => {
     const { selectedContact } = useContext(context);
 
+    console.log(selectedContact);
     const [message, setMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-    
+
     return (
         <div
             className="message-container"
@@ -52,7 +53,9 @@ const MessageArea = () => {
                                         : null
                                 }
                             >
-                                {selectedContact.status === "online"
+                                {selectedContact.isGroupChat
+                                    ? null
+                                    : selectedContact.status === "online"
                                     ? "online"
                                     : new Date(
                                           selectedContact.lastActive

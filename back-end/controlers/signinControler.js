@@ -4,7 +4,7 @@ require('dotenv').config();
 const crypto = require("crypto-js");
 const SALT = process.env.SALT; 
 
-const profilesPath = path.join(process.cwd(), "../profiles/");
+const profilesPath = path.join(process.cwd(), "profiles");
 
 const getHashedPassword = (password)=>{
     const hashedPassword = crypto.SHA256(password, SALT, crypto.enc.Hex);
@@ -17,9 +17,8 @@ const signinControler = async (req, res) => {
     const profileString = Date.now() + "-" + profilePhoto.name;
 
     try {
-        const isUserAvalable = await UserModel.findOne({ phone });
+        const isUserAvalable = await UserModel.findOne({ phone: "9641462810" });
         if (!isUserAvalable) {
-            profilePhoto.mv(path.join(profilesPath, profileString));
             const user = UserModel({
                 name,
                 phone,
@@ -27,6 +26,7 @@ const signinControler = async (req, res) => {
                 password: getHashedPassword(password), 
                 profile: profileString,
             });
+            profilePhoto.mv(path.join(profilesPath, profileString));
             const responce = await user.save();
             res.json(responce);
         } else {

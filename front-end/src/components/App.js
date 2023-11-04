@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import style from "../Styles/wraper.module.css";
 import Chatpage from "../pages/Chatpage";
 import Authentication from "../pages/Authentication";
-import AllChat from "./AllChat";
 import PersonalChat from "./PersonalChat";
 import GroupChat from "./GroupChat";
 import Login from "../pages/Login";
@@ -21,7 +20,6 @@ const App = () => {
                         </Route>
                         <Route path="/chatpage" element={<Chatpage />}>
                             <Route index element={<PersonalChat />} />
-                            <Route path="allchat" element={<AllChat />} />
                             <Route
                                 path="personalchat"
                                 element={<PersonalChat />}

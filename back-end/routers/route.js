@@ -29,7 +29,7 @@ router.get("/getallcontacts", auth, getallcontactControler);
 router.post("/contact/createGroup", auth, createGroupControler);
 router.get("/contact/findUserByNumber", auth, findUserByNumber);
 router.get("/contact/findCommonGroup", auth, findCommonGroup);
-router.delete("/contact/deleteChat", auth, deleteChat)
+router.delete("/contact/deleteChat", auth, deleteChat);
 router.put("/contact/update/about", auth, changeAboutControler);
 router.put("/contact/update/name", auth, changeNameControler);
 router.put("/contact/update/profile", auth, changeProfileControler);

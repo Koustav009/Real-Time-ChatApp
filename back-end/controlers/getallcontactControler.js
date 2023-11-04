@@ -18,13 +18,14 @@ const getallcontactControler = async (req, res, err) => {
         const users = responce.contactList.slice(startingRange, endingRange);
 
         const result = users.map((item) => {
-            const { name, phone, gmail, profile, status, lastActive } = item;
+            const { name, phone, gmail, profile, status, lastActive, about} = item;
             const obj = {
                 name,
                 phone,
                 gmail,
                 profile: getFile(profile),
                 status,
+                about,
                 lastActive,
             };
             return obj;

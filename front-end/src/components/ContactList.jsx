@@ -170,10 +170,7 @@ const ContactList = () => {
                             width={50}
                         />
                     </button>
-                    <p className="user-name">
-                        {user?.name
-                            .toLowerCase()}
-                    </p>
+                    <p className="user-name">{user?.name.toLowerCase()}</p>
                     <button
                         onClick={() => {
                             setIsAddContactModalVisible(true);
@@ -221,16 +218,6 @@ const ContactList = () => {
                     <ul className="navigation">
                         <li>
                             <NavLink
-                                to="allchat"
-                                className={({ isActive }) =>
-                                    isActive ? "active" : ""
-                                }
-                            >
-                                All
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
                                 to="personalchat"
                                 className={({ isActive }) =>
                                     isActive ? "active" : ""
@@ -239,7 +226,6 @@ const ContactList = () => {
                                 Personal
                             </NavLink>
                         </li>
-
                         <li>
                             <NavLink
                                 to="groupchats"
@@ -271,7 +257,7 @@ const ContactList = () => {
             )}
             {showProfile && <ProfileModal closeModal={setShowProfile} />}
             {isCreateGroupModalVisible && (
-                <CreateGroup closeModal={closeModal}/>
+                <CreateGroup closeModal={closeModal} />
             )}
         </div>
     );

@@ -129,12 +129,11 @@
     opacity: 0;
 }
 
-.contact {
+.contact, .group-contact{
     cursor: pointer;
     display: flex;
     margin-block: 1rem;
-    padding-block: 1rem;
-    padding-inline: 1rem;
+    padding: 1rem;
     border-radius: 1rem;
     overflow: hidden;
     transition: all .3s;
