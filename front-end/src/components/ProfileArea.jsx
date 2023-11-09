@@ -68,6 +68,7 @@ function ProfileArea() {
                 );
             });
             setCommonGroup((prev) => responce.data);
+            console.log(responce.data);
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
@@ -107,7 +108,6 @@ function ProfileArea() {
             if (!responce) {
                 throw new Error("error in fetching data");
             }
-            console.log(contacts);
             setContacts((prev) => {
                 return [
                     ...new Set(
@@ -118,7 +118,6 @@ function ProfileArea() {
                 ];
             });
             setSelectedContact((prev) => null);
-            console.log(contacts);
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
@@ -157,9 +156,6 @@ function ProfileArea() {
                                         <div
                                             className="group-participant-contact"
                                             key={index}
-                                            onClick={() =>
-                                                handleChildClick(participant)
-                                            }
                                         >
                                             <img
                                                 src={participant.profile}
@@ -226,6 +222,7 @@ function ProfileArea() {
                                             />
                                         );
                                     })}
+                                {isLoadding && <span>loadding...</span>}
                             </div>
                         </div>
                         <div className="profile-footer">
@@ -244,7 +241,6 @@ function ProfileArea() {
                     select a contact to view profile
                 </h3>
             )}
-            {isLoadding && <Loadding />}
         </div>
     );
 }

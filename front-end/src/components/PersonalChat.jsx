@@ -14,6 +14,8 @@ function PersonalChat() {
         setPage,
         setSelectedContact,
         hasMore,
+        prevDataLength,
+        setPrevDataLength,
         setHasMore,
     } = useContext(context);
     const [loadding, setLoadding] = useState(false);
@@ -28,12 +30,17 @@ function PersonalChat() {
                 params: {
                     page,
                     limit: LIMIT,
+                    prevDataLength,
                 },
             });
             if (!responce) throw new Error("error in fetching contacts");
             if (responce.data.length === 0) {
                 setHasMore(false);
+                setLoadding(false);
+                return 0;
             }
+
+            console.log(responce.data);
 
             // setting the contacts with profile photo
             setContacts((prevContacts) => {
@@ -45,6 +52,7 @@ function PersonalChat() {
                 });
                 return [...prevContacts, ...responce.data];
             });
+            setPrevDataLength(responce.data.length);
             setPage((prev) => prev + 1);
             setLoadding(false);
         } catch (error) {
@@ -55,6 +63,7 @@ function PersonalChat() {
 
     useEffect(() => {
         if (hasMore) {
+            console.log("in has more");
             fetchData();
         }
     }, [page, setContacts, fetchData, hasMore]);

@@ -9,6 +9,7 @@ export const UserContext = ({ children }) => {
     const [groups, setGroups] = useState([]);
     const [allChats, setAllChats] = useState([]);
     const [page, setPage] = useState(1);
+    const [prevDataLength, setPrevDataLength] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     return (
         <context.Provider
@@ -21,6 +22,8 @@ export const UserContext = ({ children }) => {
                 setContacts,
                 page,
                 setPage,
+                prevDataLength,
+                setPrevDataLength,
                 hasMore,
                 setHasMore,
                 groups,

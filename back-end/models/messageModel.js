@@ -23,7 +23,7 @@ const messageSchema = Schema({
     },
     timeStamp: {
         type: Date,
-        default: new Date.now(),
+        default: Date.now(),
     },
     messageStatus: {
         type: Boolean,

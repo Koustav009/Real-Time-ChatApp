@@ -4,6 +4,7 @@
     flex-direction: column;
     overflow: hidden;
     border-radius: 15px;
+    background-color: none;
 }
 
 .message-container-header {
@@ -36,11 +37,11 @@
     color: var(--text-color);
 }
 
-.message-container-header>.message-container-header-name > span{
+.message-container-header>.message-container-header-name>span {
     font-size: calc(1rem - 5px);
 }
 
-.clr-g{
+.clr-g {
     color: var(--success-color);
 }
 
@@ -67,7 +68,7 @@
     padding: 10px;
 }
 
-.message-area>p {
+.message-area>div {
     position: relative;
     margin-bottom: 2px;
     font-size: calc(1rem - 4px);
@@ -83,22 +84,31 @@
     pointer-events: none;
 }
 
-.message-area .right {
-    margin-left: auto;
+.message-area :is(.right, .left) {
     width: fit-content;
-    background-color: var(--info-text-color);
     padding: 5px;
     border-radius: 10px;
+    font-size: calc(1rem - 5px);
+    position: relative;
+}
+
+.message-area .right {
+    margin-left: auto;
     border-bottom-right-radius: 0;
+    background-color: var(--info-text-color);
 }
 
 .message-area .left {
     margin-right: auto;
-    width: fit-content;
     background-color: var(--message-area-header-color);
-    padding: 5px;
-    border-radius: 10px;
     border-bottom-left-radius: 0;
+}
+
+.message-area .info {
+    font-size: calc(1rem - 7px);
+    display: flex;
+    flex-direction: column;
+    color: var(--text-color);
 }
 
 .message-container-input-area {
@@ -111,14 +121,14 @@
     background-color: var(--message-area-header-color);
 }
 
-.message-container-input-area :is(.emoji-btn, .send-btn){
+.message-container-input-area :is(.emoji-btn, .send-btn) {
     cursor: pointer;
     color: #2995af;
     font-size: calc(2rem - 6px);
     transition: color .2s linear;
 }
 
-.message-container-input-area :is(.emoji-btn, .send-btn):hover{
+.message-container-input-area :is(.emoji-btn, .send-btn):hover {
     color: #2994af8a;
 }
 
@@ -133,8 +143,13 @@
     font-size: 1rem;
     color: var(--text-color);
 }
-.emoji-picker{
+
+.emoji-picker {
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.no-message {
+    color: var(--text-color);
 }

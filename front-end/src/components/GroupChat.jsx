@@ -36,6 +36,7 @@ const GroupChat = () => {
                 console.log(responce.data);
                 // preserving all the group data
                 setGroups(responce.data);
+                console.log(responce.data);
                 setIsLoading(false);
             } catch (error) {
                 setIsLoading(false);

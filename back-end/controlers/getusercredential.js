@@ -5,7 +5,7 @@ const getusercredential = async (req, res) => {
     const phone = req.user.phone;
     try {
         const responce = await UserModel.findOne({ phone }).select(
-            "-_id -contactList -password -status -lastActive -groupList"
+            "-contactList -password -status -lastActive -groupList"
         );
         if (!responce) {
             return res.status(404).send("user not found");
@@ -13,6 +13,7 @@ const getusercredential = async (req, res) => {
         res.status(201).json({
             profile: getFile(responce.profile),
             credential: {
+                id: responce._id,
                 name: responce.name,
                 phone: responce.phone,
                 gmail: responce.gmail,

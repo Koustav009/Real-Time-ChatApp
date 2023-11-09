@@ -7,7 +7,6 @@ const getGroupControler = async (req, res) => {
             .select("groupList -_id")
             .populate({
                 path: "groupList",
-                select: "-_id",
             });
 
         const dataToBeSend = [];
@@ -23,6 +22,7 @@ const getGroupControler = async (req, res) => {
                 select: "-_id name phone",
             });
             dataToBeSend.push({
+                id: group._id,
                 name: group.name,
                 profile: getGroupFile(group.profile),
                 admin: group.admin,

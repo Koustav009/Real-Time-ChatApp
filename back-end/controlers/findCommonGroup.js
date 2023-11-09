@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const {getGroupFile} = require("../helper/getFile");
+const { getGroupFile } = require("../helper/getFile");
 
 const findCommonGroup = async (req, res) => {
     try {
@@ -11,13 +11,16 @@ const findCommonGroup = async (req, res) => {
             .select("groupList -_id")
             .populate({
                 path: "groupList",
-                select: "conversasionId -_id name profile",
+                select: "conversasionId name profile",
             });
 
         for (let i = 0; i < response.groupList.length; i++) {
             await response.groupList[i].populate({
                 path: "conversasionId",
-                select: "participants -_id",
+            });
+            await response.groupList[i].conversasionId.populate({
+                path: "participants",
+                select: "name phone",
             });
         }
 
@@ -27,13 +30,17 @@ const findCommonGroup = async (req, res) => {
             group.conversasionId.participants.forEach((id) => {
                 if (id.equals(user._id)) {
                     matchingGroups.push({
+                        id: group._id,
                         name: group.name,
                         profile: getGroupFile(group.profile),
+                        admin: group.admin,
+                        participants: group.conversasionId.participants,
+                        lastMessage: group.conversasionId.lastMessage,
+                        isGroupChat: group.conversasionId.isGroupChat,
                     });
                 }
             });
         });
-
         res.send(matchingGroups);
     } catch (error) {
         res.send(error);

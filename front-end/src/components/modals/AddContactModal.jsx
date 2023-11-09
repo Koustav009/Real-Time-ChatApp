@@ -3,11 +3,13 @@ import "../../Styles/addContactModal.css";
 import { ImCross } from "react-icons/im";
 import axios from "axios";
 import { getCookie } from "../../Cookie/cookieConfigure";
+import { context } from "../../context/UserContext";
 
 const API = "http://localhost:5500/contact/addcontact";
 
 function AddContactModal({ closeModal, handleError, handleSuccess }) {
     const [inputData, setInputData] = useState("");
+    const {setHasMore} = useContext(context);
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -20,7 +22,7 @@ function AddContactModal({ closeModal, handleError, handleSuccess }) {
                     Authorization: `Bearer ${getCookie("token")}`,
                 },
             });
-            window.location.reload(false);
+            setHasMore(true);
             closeModal(false);
             handleSuccess(true);
         } catch (error) {

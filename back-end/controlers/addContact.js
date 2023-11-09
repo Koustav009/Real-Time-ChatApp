@@ -35,16 +35,27 @@ const addContact = async (req, res) => {
             senderUser.contactList.push(receiverUser._id);
             await senderUser.save();
 
-            // creating a conversation document
-            const participants = [
-                new ObjectId(senderUser._id),
-                new ObjectId(receiverUser._id),
-            ]
-            const conversation = new ConversationModel({
-                participants,
-                isGroupChat: false,
-            });
-            await conversation.save();
+            // check if the conversation document is present or not
+            const isConversationPresent = await ConversationModel.findOne({
+                participants: {
+                    $all: [senderUser._id, receiverUser._id],
+                },
+            }).where("isGroupChat").equals(false);
+
+            // add conversation between this two users if don't have
+            if (!isConversationPresent) {
+                // creating a conversation document
+                const participants = [
+                    new ObjectId(senderUser._id),
+                    new ObjectId(receiverUser._id),
+                ];
+                const conversation = new ConversationModel({
+                    participants,
+                    isGroupChat: false,
+                });
+                await conversation.save();
+            }
+
             return res.status(200).send("contact added successfull");
         } else {
             return res.status(409).send("all already exists");
