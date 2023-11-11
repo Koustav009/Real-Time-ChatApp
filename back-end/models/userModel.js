@@ -42,9 +42,9 @@ const userSchema = mongoose.Schema({
     },
     status: {
         type: String,
-        default: "online",
+        default: "offline",
         enum: {
-            values: ["online", "ofline"],
+            values: ["online", "offline"],
             message: "{VALUE} is not supported",
         },
     },

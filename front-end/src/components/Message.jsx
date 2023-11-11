@@ -5,7 +5,7 @@ const Message = ({ message }) => {
     const { user } = useContext(context);
     return (
         <>
-            <div className={user.id === message.sender.id ? "right" : "left"}>
+            <div className={user.id === message.sender._id ? "right" : "left"}>
                 {message.messageContent}
                 <p className="info">
                     <span>

@@ -40,8 +40,6 @@ function PersonalChat() {
                 return 0;
             }
 
-            console.log(responce.data);
-
             // setting the contacts with profile photo
             setContacts((prevContacts) => {
                 responce.data.map((contact) => {
@@ -56,14 +54,12 @@ function PersonalChat() {
             setPage((prev) => prev + 1);
             setLoadding(false);
         } catch (error) {
-            console.log(error);
             setLoadding(false);
         }
     }, [page, setContacts, setLoadding, setHasMore, setPage]);
 
     useEffect(() => {
         if (hasMore) {
-            console.log("in has more");
             fetchData();
         }
     }, [page, setContacts, fetchData, hasMore]);

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { context } from "../context/UserContext";
 import {
     BsTelephoneFill,
@@ -14,16 +14,142 @@ import axios from "axios";
 import { getCookie } from "../Cookie/cookieConfigure";
 import Message from "./Message";
 import Loadding from "../components/modals/Loadding";
-// import { socket } from "../socket";
+import { io } from "socket.io-client";
+var socket, selectedConversation;
+const URL = "http://localhost:5500";
 
 const MessageArea = () => {
-    const { selectedContact } = useContext(context);
+    const { selectedContact, contacts, setContacts, setNotifications } =
+        useContext(context);
     const [inputMessage, setInputMessage] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [messages, setMessages] = useState([]);
     const [isLoadding, setIsLoadding] = useState(false);
+    const messageAreaRef = useRef(null);
 
-    const sendMsg = () => {};
+    useEffect(() => {
+        socket = io(URL, { auth: { token: `Bearer ${getCookie("token")}` } });
+
+        socket.on("connect", () => {
+            console.log("socket connected...");
+        });
+        socket.emit("set-up");
+        return () => {
+            socket.off("connect");
+            socket.disconnect();
+        };
+    }, []);
+
+
+    useEffect(() => {
+        socket.on("new-message-received", (message) => {
+            if (
+                selectedConversation &&
+                selectedConversation === message.conversationId
+            ) {
+                setMessages((prev) => [...prev, message]);
+            } else {
+                console.log(message);
+                const newNotification = {
+                    sender: message.sender.name,
+                    messageContent: message.messageContent,
+                    timeStamp: message.timeStamp,
+                };
+                setNotifications((prev) => {
+                    const notification = [...prev, newNotification];
+                    return notification;
+                });
+            }
+        });
+
+        // socket for seting contact to online
+        socket.on("online", (id) => {
+            contacts.forEach((contact) => {
+                if (contact._id === id) {
+                    contact.status = "online";
+                    const newContactsArray = contacts;
+                    setContacts((prev) => [...newContactsArray]);
+                    return;
+                }
+            });
+        });
+
+        // socket for seting contact to offline
+        socket.on("offline", (id) => {
+            contacts.forEach((contact) => {
+                if (contact._id === id) {
+                    contact.status = "offline";
+                    contact.lastActive = new Date();
+                    const newContactsArray = contacts;
+                    setContacts((prev) => [...newContactsArray]);
+                    return;
+                }
+            });
+        });
+
+        socket.on("connect_error", (error) => {
+            console.log("token needed");
+            socket.disconnect();
+        });
+
+        return () => {
+            socket.off("new-message-received");
+            socket.off("online");
+            socket.off("offline");
+        };
+    });
+
+    const sendMsg = async () => {
+        if (!inputMessage) return;
+        if (
+            selectedContact.hasOwnProperty("isGroupChat") &&
+            selectedContact.isGroupChat
+        ) {
+            try {
+                const endPoint =
+                    "http://localhost:5500/contact/newGrouopMessage";
+                const responce = await axios.post(
+                    endPoint,
+                    {
+                        selectedGroupId: selectedContact.id,
+                        message: inputMessage,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                    }
+                );
+                setMessages((prev) => [...prev, responce.data]);
+                socket.emit("new-message", responce.data);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            try {
+                const endPoint =
+                    "http://localhost:5500/contact/newSingleMessage";
+                const responce = await axios.post(
+                    endPoint,
+                    {
+                        selectedUserPhone: selectedContact.phone,
+                        message: inputMessage,
+                    },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${getCookie("token")}`,
+                        },
+                    }
+                );
+                setMessages((prev) => [...prev, responce.data]);
+                socket.emit("new-message", responce.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        setInputMessage((prev) => "");
+    };
+
     useEffect(() => {
         const fetchSingleChatMsg = async () => {
             try {
@@ -38,9 +164,15 @@ const MessageArea = () => {
                         selectedUserPhone: selectedContact.phone,
                     },
                 });
-                if (!responce) throw new Error("no messages");
-                setMessages((prev) => [...prev, ...responce.data]);
                 setIsLoadding(() => false);
+                if (typeof responce.data === "string") {
+                    socket.emit("join-chat", responce.data);
+                    selectedConversation = responce.data;
+                    return 0;
+                }
+                setMessages((prev) => [...prev, ...responce.data]);
+                selectedConversation = responce.data[0].conversationId;
+                socket.emit("join-chat", responce.data[0].conversationId);
             } catch (error) {
                 setIsLoadding(() => false);
                 console.log(error);
@@ -60,10 +192,15 @@ const MessageArea = () => {
                         groupId: selectedContact.id,
                     },
                 });
-                if(!responce) throw new Error("no messages");
-                setMessages(prev=>[...prev, ...responce.data]);
-                console.log(responce.data);
                 setIsLoadding(false);
+                if (typeof responce.data === "string") {
+                    socket.emit("join-chat", responce.data);
+                    selectedConversation = responce.data;
+                    return 0;
+                }
+                setMessages((prev) => [...prev, ...responce.data]);
+                selectedConversation = responce.data[0].conversationId;
+                socket.emit("join-chat", responce.data[0].conversationId);
             } catch (error) {
                 setIsLoadding(false);
                 console.log(error);
@@ -81,6 +218,13 @@ const MessageArea = () => {
             setMessages((prev) => []);
         };
     }, [selectedContact]);
+
+    useEffect(() => {
+        messageAreaRef.current?.scrollTo(
+            0,
+            messageAreaRef.current.scrollHeight
+        );
+    }, [messages]);
 
     return (
         <div
@@ -124,11 +268,17 @@ const MessageArea = () => {
                                       ).toLocaleTimeString()}
                             </span>
                         </p>
-                        <BsTelephoneFill className="message-container-header-call" />
-                        <BiSolidVideo className="message-container-header-video-call" />
+                        <BsTelephoneFill
+                            className="message-container-header-call"
+                            style={{ display: "none" }}
+                        />
+                        <BiSolidVideo
+                            className="message-container-header-video-call"
+                            style={{ display: "none" }}
+                        />
                         <BsThreeDotsVertical className="message-container-header-video-call" />
                     </div>
-                    <div className="message-area">
+                    <div className="message-area" ref={messageAreaRef}>
                         {messages.length ? (
                             messages.map((message, index) => {
                                 return (

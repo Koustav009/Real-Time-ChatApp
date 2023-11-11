@@ -68,7 +68,6 @@ function ProfileArea() {
                 );
             });
             setCommonGroup((prev) => responce.data);
-            console.log(responce.data);
             setIsLoading(false);
         } catch (error) {
             setIsLoading(false);

@@ -7,7 +7,6 @@ const Contact = ({ contact, onChildClick }) => {
     const handleClick = () => {
         onChildClick(contact);
     };
-
     const { name, profile, lastActive, status, phone } = contact;
     return (
         <div className="contact" onClick={handleClick}>
@@ -19,14 +18,22 @@ const Contact = ({ contact, onChildClick }) => {
                 />
             </div>
             <div className="contact-info">
-                <h1 className="name">{name ? name.split(" ")[0].toLowerCase() : phone}</h1>
-                <p className="lastmessage">{false ? "Typing..." : "last message"}</p>
+                <h1 className="name">
+                    {name ? name.split(" ")[0].toLowerCase() : phone}
+                </h1>
+                {/*<p className="lastmessage">
+                    {"no message"}
+                </p>*/}
             </div>
             <div className="status">
                 {status === "online" ? (
                     <span className="onlineIndecator"></span>
                 ) : (
-                    <p className="lastseen">{lastActive?new Date(lastActive).toLocaleTimeString() :null}</p>
+                    <p className="lastseen">
+                        {lastActive
+                            ? new Date(lastActive).toLocaleTimeString()
+                            : null}
+                    </p>
                 )}
             </div>
         </div>

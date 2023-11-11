@@ -1,5 +1,5 @@
 const UserModel = require("../models/userModel");
-const getFile = require("../helper/getFile");
+const { getFile } = require("../helper/getFile");
 
 const searchControler = async (req, res) => {
     const { phone } = req.query;
@@ -11,7 +11,7 @@ const searchControler = async (req, res) => {
                 select: "-password -contactList -groupList -_id",
             });
 
-        for (let i = 0; i < responce.contactList.length; i++){
+        for (let i = 0; i < responce.contactList.length; i++) {
             const item = responce.contactList[i];
             if (item.phone === phone) {
                 const { name, phone, gmail, profile, status, lastActive } =
@@ -24,9 +24,9 @@ const searchControler = async (req, res) => {
                     status,
                     lastActive,
                 };
-                return res.status(201).json(obj);
+                return res.status(201).send(obj);
             }
-        };
+        }
         throw new Error("not found");
     } catch (error) {
         return res.status(404).send("not found");

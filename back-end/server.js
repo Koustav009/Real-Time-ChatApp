@@ -25,11 +25,11 @@ const expressServer = app.listen(PORT, () => {
     console.log(`server listen on http://localhost:${PORT}`.bold.blue);
 });
 
-// const io = new Server(expressServer, {
-//     pingTimeout: 60000,
-//     cors: {
-//         origin: "http://localhost:3000",
-//     },
-// });
+const io = new Server(expressServer, {
+    pingTimeout: 60000,
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
 
-// namespace(io)
+namespace(io)

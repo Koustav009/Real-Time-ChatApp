@@ -4,6 +4,7 @@
     backdrop-filter: blur(5px);
     animation: animate .2s linear;
     background-color: var(--background-color);
+    overflow: auto;
 }
 
 .profile-div {

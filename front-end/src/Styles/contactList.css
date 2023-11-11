@@ -10,6 +10,7 @@
     display: flex;
     justify-content: space-between;
     gap: 5px;
+    padding: 5px;
 }
 
 .contactLlstHead .profile {
@@ -186,6 +187,12 @@
     object-position: center;
 }
 
+.contact{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .contact-info .name, 
 .group-contact .group-info .name{
     width: 50%;
@@ -203,12 +210,12 @@
 
 .contactBtn {
     cursor: pointer;
-    padding: 10px;
+    padding: 5px;
     outline: none;
     border: none;
     color: var(--text-color-less);
     background-color: transparent;
-    transform: color 1s;
+    transform: color 3s;
 }
 
 .contactBtn * {
@@ -217,6 +224,22 @@
 
 .contactBtn:is(:hover, :focus) {
     color: var(--text-color);
+}
+
+.notification-btn{
+    position: relative;
+}
+
+#active-nofication::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    top: 0.8rem;
+    left: 1.9rem;
+    width: calc(1rem - 8px);
+    height: calc(1rem - 8px);
+    background-color: var(--online-indecator);
+    border-radius: 50%;
 }
 
 .group-contact {
@@ -228,8 +251,4 @@
     cursor: pointer;
     transition: all .3s linear;
     border-radius: 10px;
-}
-
-.group-contact .group-info{
-
 }

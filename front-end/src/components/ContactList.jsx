@@ -14,8 +14,10 @@ import Loadding from "./modals/Loadding";
 import Success from "./modals/Success";
 import { ImCross } from "react-icons/im";
 import { MdOutlineGroupAdd } from "react-icons/md";
+import { IoMdNotifications } from "react-icons/io";
 import Contact from "./Contact";
 import CreateGroup from "./modals/CreateGroup";
+import NotificationModal from "./modals/NotificationModal";
 const API = "http://localhost:5500/getusercredential";
 
 const ContactList = () => {
@@ -23,19 +25,21 @@ const ContactList = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState(false);
     const [loadding, setLoadding] = useState(true);
-    const { user, setUser, contacts, setSelectedContact } = useContext(context);
+    const { user, setUser, setSelectedContact, notifications } =
+        useContext(context);
     const [showProfile, setShowProfile] = useState(false);
     const [contactInputField, setContactInputField] = useState("");
     const [isAddContactModalVisible, setIsAddContactModalVisible] =
         useState(false);
     const [isUserSearchName, setIsUserSearchName] = useState(false);
-    const [searchedContact, setSearchedContact] = useState([]);
+    const [searchedContact, setSearchedContact] = useState();
     const [exitSearchContact, setExitSearchContact] = useState(false);
     const [isSearchLoadding, setIsSearchLoadding] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errormsg, setErrormsg] = useState("");
     const [isCreateGroupModalVisible, setIsCreateGroupModalVisible] =
         useState(false);
+    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
         const token = getCookie("token");
@@ -64,7 +68,6 @@ const ContactList = () => {
             } catch (error) {
                 setIsError(true);
                 setErrormsg(error.message);
-                console.log(error);
             }
             setLoadding(false);
         };
@@ -80,48 +83,35 @@ const ContactList = () => {
             setIsSearchLoadding(true);
             setExitSearchContact(true);
             setIsUserSearchName(true);
-            if (contacts.length) {
-                contacts.forEach((contact) => {
-                    if (contact.phone === contactInputField) {
-                        setSearchedContact((prev) => contact);
-                        console.log(contact);
-                        return 0;
-                    }
+
+            const payload = {
+                phone: contactInputField,
+            };
+            const endPoint = "http://localhost:5500/contact/searchuser";
+            try {
+                const responce = await axios.get(endPoint, {
+                    headers: {
+                        Authorization: `Bearer ${getCookie("token")}`,
+                    },
+                    params: payload,
                 });
-            } else {
-                const payload = {
-                    phone: contactInputField,
+                if (!responce.data) throw new Error("not found");
+                const unit8Array = new Uint8Array(responce.data.profile.data);
+                const profileLink = URL.createObjectURL(new Blob([unit8Array]));
+                const { name, gmail, lastActive, phone, status } =
+                    responce.data;
+                const contact = {
+                    name,
+                    gmail,
+                    phone,
+                    status,
+                    lastActive,
+                    profile: profileLink,
                 };
-                const endPoint = "http://localhost:5500/contact/searchuser";
-                try {
-                    const responce = await axios.get(endPoint, {
-                        headers: {
-                            Authorization: `Bearer ${getCookie("token")}`,
-                        },
-                        params: payload,
-                    });
-                    const unit8Array = new Uint8Array(
-                        responce.data.profile.data
-                    );
-                    const profileLink = URL.createObjectURL(
-                        new Blob([unit8Array])
-                    );
-                    const { name, gmail, lastActive, phone, status } =
-                        responce.data;
-                    const contact = {
-                        name,
-                        gmail,
-                        phone,
-                        status,
-                        lastActive,
-                        profile: profileLink,
-                    };
-                    setSearchedContact((prev) => contact);
-                } catch (error) {
-                    console.log(error);
-                    setErrormsg(error.response.data || "not found");
-                    setIsError(true);
-                }
+                setSearchedContact((prev) => contact);
+            } catch (error) {
+                setErrormsg("not found");
+                setIsError(true);
             }
             setIsSearchLoadding(false);
         } else {
@@ -149,6 +139,8 @@ const ContactList = () => {
     const closeModal = () => {
         setIsCreateGroupModalVisible((prev) => false);
     };
+
+    useEffect(() => {}, [notifications]);
 
     return (
         <div className="contactListArea">
@@ -187,6 +179,15 @@ const ContactList = () => {
                     >
                         <MdOutlineGroupAdd />
                     </button>
+                    <button
+                        className="contactBtn notification-btn"
+                        id={notifications.length ? "active-nofication" : null}
+                        onClick={() => {
+                            setShowNotification(prev=>!prev);
+                        }}
+                    >
+                        <IoMdNotifications />
+                    </button>
                 </div>
                 <div id="contactSearchDiv">
                     <input
@@ -209,10 +210,14 @@ const ContactList = () => {
                 <ErrorModal errorMsg={errormsg} handleError={closeErrorModel} />
             )}
             {isUserSearchName ? (
-                <Contact
-                    contact={searchedContact}
-                    onChildClick={handleSelectedContact}
-                />
+                searchedContact ? (
+                    <Contact
+                        contact={searchedContact}
+                        onChildClick={handleSelectedContact}
+                    />
+                ) : (
+                    "no contacts"
+                )
             ) : (
                 <div className="chatListdiv">
                     <ul className="navigation">
@@ -259,6 +264,7 @@ const ContactList = () => {
             {isCreateGroupModalVisible && (
                 <CreateGroup closeModal={closeModal} />
             )}
+            {showNotification && <NotificationModal notifications={notifications}/>}
         </div>
     );
 };

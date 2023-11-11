@@ -29,6 +29,8 @@ const loginControler = async (req, res) => {
                     name: user.name,
                     phone: user.phone,
                 };
+                user.status = "online";
+                await user.save();
                 const token = generateToken(payload);
                 res.status(201).json({ token });
             } else {

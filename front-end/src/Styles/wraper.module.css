@@ -28,6 +28,12 @@
   background-color: #15d1c4;
 }
 
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 html {
   background-color: var(--background-color);
   font-family: 'REM', sans-serif;

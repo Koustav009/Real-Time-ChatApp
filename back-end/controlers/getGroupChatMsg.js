@@ -21,7 +21,7 @@ const getGroupChatMsg = async (req, res) => {
                 _id: message._id,
                 conversationId: message.conversationId,
                 sender: {
-                    id: message.senderId._id,
+                    _id: message.senderId._id,
                     name: message.senderId.name,
                     gmail: message.senderId.gmail,
                     phone: message.senderId.phone,
@@ -31,7 +31,7 @@ const getGroupChatMsg = async (req, res) => {
                 messageStatus: message.messageStatus,
             });
         });
-        res.status(201).send(dataTobeSend);
+        res.status(201).send(dataTobeSend.length?dataTobeSend:group.conversasionId);
     } catch (error) {
         console.log(error);
         res.status(404).send(error.message);

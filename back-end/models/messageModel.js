@@ -31,6 +31,14 @@ const messageSchema = Schema({
     },
 });
 
+messageSchema.pre("save", function (next) {
+    if(this.isNew){
+        this.timeStamp = new Date();
+        next();
+    }
+    next();
+});
+
 const MessageModel = model("MessageModel", messageSchema);
 
 module.exports = MessageModel;
