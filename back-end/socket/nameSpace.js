@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const toogleOnlineOffline = require("./cb/toogleOnlineOffline");
+const getConverstionId = require("./cb/getConverstionId");
 
 const isAuthUser = (token) => {
     try {
@@ -39,9 +40,11 @@ const namespace = (io) => {
                 "online"
             );
             contactList.forEach((contact) => {
-                console.log(socket.user.id, contact);
-                socket.join(contact.toString());
                 socket.to(contact.toString()).emit("online", socket.user.id);
+            });
+            const converSationIds = await getConverstionId(socket.user.id);
+            converSationIds.forEach((converSationId) => {
+                socket.join(converSationId._id.toString());
             });
         });
 

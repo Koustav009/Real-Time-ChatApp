@@ -49,7 +49,6 @@ const MessageArea = () => {
             ) {
                 setMessages((prev) => [...prev, message]);
             } else {
-                console.log(message);
                 const newNotification = {
                     sender: message.sender.name,
                     messageContent: message.messageContent,

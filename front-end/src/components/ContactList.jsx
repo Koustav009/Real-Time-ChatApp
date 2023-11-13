@@ -25,8 +25,13 @@ const ContactList = () => {
     const [error, setError] = useState();
     const [success, setSuccess] = useState(false);
     const [loadding, setLoadding] = useState(true);
-    const { user, setUser, setSelectedContact, notifications } =
-        useContext(context);
+    const {
+        user,
+        setUser,
+        setSelectedContact,
+        notifications,
+        setNotifications,
+    } = useContext(context);
     const [showProfile, setShowProfile] = useState(false);
     const [contactInputField, setContactInputField] = useState("");
     const [isAddContactModalVisible, setIsAddContactModalVisible] =
@@ -140,6 +145,18 @@ const ContactList = () => {
         setIsCreateGroupModalVisible((prev) => false);
     };
 
+    const deleteNotification = (noti) => {
+        setNotifications((prev) => {
+            return notifications.filter(
+                (notification) => notification !== noti
+            );
+        });
+    };
+
+    const closeNotificationModal = () => {
+        setShowNotification(false);
+    };
+
     useEffect(() => {}, [notifications]);
 
     return (
@@ -183,7 +200,7 @@ const ContactList = () => {
                         className="contactBtn notification-btn"
                         id={notifications.length ? "active-nofication" : null}
                         onClick={() => {
-                            setShowNotification(prev=>!prev);
+                            setShowNotification((prev) => !prev);
                         }}
                     >
                         <IoMdNotifications />
@@ -264,7 +281,13 @@ const ContactList = () => {
             {isCreateGroupModalVisible && (
                 <CreateGroup closeModal={closeModal} />
             )}
-            {showNotification && <NotificationModal notifications={notifications}/>}
+            {showNotification && (
+                <NotificationModal
+                    notifications={notifications}
+                    deleteNotification={deleteNotification}
+                    closeNotificationModal={closeNotificationModal}
+                />
+            )}
         </div>
     );
 };
